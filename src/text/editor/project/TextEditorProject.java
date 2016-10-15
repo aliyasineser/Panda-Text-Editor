@@ -31,10 +31,12 @@ public class TextEditorProject extends Application {
         fileMenu.getItems().add(newFile);
         fileMenu.getItems().add(new MenuItem("Open..."));
         fileMenu.getItems().add(new MenuItem("Save..."));
+        fileMenu.getItems().add(new MenuItem("Save to..."));
         fileMenu.getItems().add(new SeparatorMenuItem());
-        fileMenu.getItems().add(new MenuItem("Settings..."));
+        fileMenu.getItems().add(new MenuItem("Settings"));
+        fileMenu.getItems().add(new MenuItem("Print"));
         fileMenu.getItems().add(new SeparatorMenuItem());
-        fileMenu.getItems().add(new MenuItem("Exit..."));
+        fileMenu.getItems().add(new MenuItem("Exit"));
         
         //Main menu bar
         MenuBar menuBar = new MenuBar();
