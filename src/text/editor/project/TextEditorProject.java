@@ -34,14 +34,23 @@ public class TextEditorProject extends Application {
         fileMenu.getItems().add(openFile);
         openFile.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
-            configureFileChooser(fileChooser);
+            configureFileChooserOpen(fileChooser);
+            File file = fileChooser.showOpenDialog(window);
+            if (file != null) {
+                openFile(file);
+            }
+        });
+        MenuItem saveItem = new MenuItem("Save...");
+        fileMenu.getItems().add(saveItem);
+        saveItem.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            configureFileChooserSave(fileChooser);
             File file = fileChooser.showOpenDialog(window);
             if (file != null) {
                 openFile(file);
             }
         });
 
-        fileMenu.getItems().add(new MenuItem("Save..."));
         fileMenu.getItems().add(new MenuItem("Save to directory"));
         fileMenu.getItems().add(new MenuItem("Save to FTP"));
         fileMenu.getItems().add(new SeparatorMenuItem());
@@ -55,10 +64,7 @@ public class TextEditorProject extends Application {
             // Popup cikar.
             primaryStage.close();
         });
-        
-        
-        
-        
+
         //Main menu bar
         MenuBar menuBar = new MenuBar();
         menuBar.getMenus().addAll(fileMenu);
@@ -106,7 +112,7 @@ public class TextEditorProject extends Application {
 
     }
 
-    private static void configureFileChooser(final FileChooser fileChooser) {
+    private static void configureFileChooserOpen(final FileChooser fileChooser) {
         fileChooser.setTitle("Open file");
         fileChooser.setInitialDirectory(
                 new File(System.getProperty("user.home"), "/Desktop"));
@@ -116,6 +122,15 @@ public class TextEditorProject extends Application {
 
         fileChooser.getExtensionFilters().add(txtFilter);
         fileChooser.getExtensionFilters().add(allFilter);
+    }
+
+    private static void configureFileChooserSave(final FileChooser fileChooser) {
+        fileChooser.setTitle("Save file");
+        fileChooser.setInitialDirectory(
+                new File(System.getProperty("user.home"), "/Desktop"));
+
+        FileChooser.ExtensionFilter pteFilter = new FileChooser.ExtensionFilter("PTE files (*.pte)", "*.pte");
+        fileChooser.getExtensionFilters().add(pteFilter);
 
     }
 
