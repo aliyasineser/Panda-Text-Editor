@@ -1,18 +1,13 @@
 package text.editor.project;
 
-
 import java.awt.Desktop;
 import java.io.File;
-import java.io.IOException;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.*;
 import javafx.scene.web.HTMLEditor;
-import java.io.*;
+import javafx.print.PrinterJob;
 import javafx.scene.layout.*;
 
 /**
@@ -23,53 +18,65 @@ public class TextEditorProject extends Application {
 
     Stage window;
     BorderPane layout;
-    
-    
+
     private Desktop desktop = Desktop.getDesktop();
-    
+
     @Override
     public void start(Stage primaryStage) {
-       
+
         //File menu
         Menu fileMenu = new Menu("File");
         MenuItem newFile = new MenuItem("New...");
         newFile.setOnAction(e -> System.out.println("Create a new file..."));
         fileMenu.getItems().add(newFile);
-        
+
         MenuItem openFile = new MenuItem("Open...");
         fileMenu.getItems().add(openFile);
         openFile.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
+            configureFileChooser(fileChooser);
             File file = fileChooser.showOpenDialog(window);
             if (file != null) {
                 openFile(file);
             }
         });
-        
-        
+
         fileMenu.getItems().add(new MenuItem("Save..."));
-        fileMenu.getItems().add(new MenuItem("Save to..."));
+        fileMenu.getItems().add(new MenuItem("Save to directory"));
+        fileMenu.getItems().add(new MenuItem("Save to FTP"));
         fileMenu.getItems().add(new SeparatorMenuItem());
         fileMenu.getItems().add(new MenuItem("Settings"));
-        fileMenu.getItems().add(new MenuItem("Print"));
+        MenuItem print = new MenuItem("Print");
+        fileMenu.getItems().add(print);
         fileMenu.getItems().add(new SeparatorMenuItem());
-        fileMenu.getItems().add(new MenuItem("Exit"));
+        MenuItem exitProgram = new MenuItem("Exit");
+        fileMenu.getItems().add(exitProgram);
+        exitProgram.setOnAction(e -> {
+            // Popup cikar.
+            primaryStage.close();
+        });
+        
         
         
         
         //Main menu bar
         MenuBar menuBar = new MenuBar();
         menuBar.getMenus().addAll(fileMenu);
-        
-        
+
         final HTMLEditor htmlEditor = new HTMLEditor();
-        
-        htmlEditor.setPrefHeight(400);  
-        
-        
-        // Sol tarafa File Explorer set et !!! 
-        
-        
+
+        htmlEditor.setPrefHeight(400);
+
+        print.setOnAction(e -> {
+            PrinterJob job = PrinterJob.createPrinterJob();
+            if (job != null) {
+                job.showPrintDialog(null);
+                htmlEditor.print(job);
+                job.endJob();
+            }
+        }
+        );
+
         // Show Time
         layout = new BorderPane();
         layout.setTop(menuBar);
@@ -86,9 +93,8 @@ public class TextEditorProject extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
-    
-    private void openFile(File file){
+
+    private void openFile(File file) {
 //        try {
 //            desktop.open(file);
 //        } catch (Exception ex) {
@@ -97,7 +103,20 @@ public class TextEditorProject extends Application {
 //                    Level.SEVERE, null, ex
 //                );
 //        }
-        
+
     }
-    
+
+    private static void configureFileChooser(final FileChooser fileChooser) {
+        fileChooser.setTitle("Open file");
+        fileChooser.setInitialDirectory(
+                new File(System.getProperty("user.home"), "/Desktop"));
+
+        FileChooser.ExtensionFilter txtFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        FileChooser.ExtensionFilter allFilter = new FileChooser.ExtensionFilter("All files (*)", "*");
+
+        fileChooser.getExtensionFilters().add(txtFilter);
+        fileChooser.getExtensionFilters().add(allFilter);
+
+    }
+
 }
