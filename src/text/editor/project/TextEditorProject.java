@@ -25,6 +25,10 @@ public class TextEditorProject extends Application {
     @Override
     public void start(Stage primaryStage) {
 
+        final HTMLEditor htmlEditor = new HTMLEditor();
+
+        htmlEditor.setPrefHeight(400);
+
         //File menu
         Menu fileMenu = new Menu("File");
         MenuItem newFile = new MenuItem("New...");
@@ -37,7 +41,7 @@ public class TextEditorProject extends Application {
             FileChooser fileChooser = new FileChooser();
             configureFileChooserOpen(fileChooser);
             File file = fileChooser.showOpenDialog(window);
-            
+
             if (file != null) {
                 openFile(file);
             }
@@ -48,9 +52,9 @@ public class TextEditorProject extends Application {
             FileChooser fileChooser = new FileChooser();
             configureFileChooserSave(fileChooser);
             File file = fileChooser.showSaveDialog(window);
-            
+
             if (file != null) {
-                System.err.println(file.getName());
+                // Buraya save islemi yapilacak
             }
         });
 
@@ -60,6 +64,15 @@ public class TextEditorProject extends Application {
         fileMenu.getItems().add(new MenuItem("Settings"));
         MenuItem print = new MenuItem("Print");
         fileMenu.getItems().add(print);
+        print.setOnAction(e -> {
+            PrinterJob job = PrinterJob.createPrinterJob();
+            if (job != null) {
+                job.showPrintDialog(null);
+                htmlEditor.print(job);
+                job.endJob();
+            }
+        }
+        );
         fileMenu.getItems().add(new SeparatorMenuItem());
         MenuItem exitProgram = new MenuItem("Exit");
         fileMenu.getItems().add(exitProgram);
@@ -72,26 +85,15 @@ public class TextEditorProject extends Application {
         MenuBar menuBar = new MenuBar();
         menuBar.getMenus().addAll(fileMenu);
 
-        final HTMLEditor htmlEditor = new HTMLEditor();
+       
+        primaryStage.getIcons().addAll(new Image("file:src/Assets/32x32_panda_icon.png"),
+                new Image("file:src/Assets/64x64_panda_icon.png"),new Image("file:src/Assets/256x256_panda_icon.png"));
 
-        htmlEditor.setPrefHeight(400);
-
-        print.setOnAction(e -> {
-            PrinterJob job = PrinterJob.createPrinterJob();
-            if (job != null) {
-                job.showPrintDialog(null);
-                htmlEditor.print(job);
-                job.endJob();
-            }
-        }
-        );
-        System.err.println(System.getProperty("user.dir"));
-        primaryStage.getIcons().add(new Image("file:src/Assets/panda_icon.png"));
         // Show Time
         layout = new BorderPane();
         layout.setTop(menuBar);
         layout.setCenter(htmlEditor);
-        primaryStage.setTitle("Text Editor");
+        primaryStage.setTitle("Panda Text Editor");
         Scene scene = new Scene(layout, 800, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
