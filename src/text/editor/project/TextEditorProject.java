@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.stage.*;
 import javafx.scene.web.HTMLEditor;
 import javafx.print.PrinterJob;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 
 /**
@@ -36,6 +37,7 @@ public class TextEditorProject extends Application {
             FileChooser fileChooser = new FileChooser();
             configureFileChooserOpen(fileChooser);
             File file = fileChooser.showOpenDialog(window);
+            
             if (file != null) {
                 openFile(file);
             }
@@ -45,9 +47,10 @@ public class TextEditorProject extends Application {
         saveItem.setOnAction(e -> {
             FileChooser fileChooser = new FileChooser();
             configureFileChooserSave(fileChooser);
-            File file = fileChooser.showOpenDialog(window);
+            File file = fileChooser.showSaveDialog(window);
+            
             if (file != null) {
-                openFile(file);
+                System.err.println(file.getName());
             }
         });
 
@@ -82,7 +85,8 @@ public class TextEditorProject extends Application {
             }
         }
         );
-
+        System.err.println(System.getProperty("user.dir"));
+        primaryStage.getIcons().add(new Image("file:src/Assets/panda_icon.png"));
         // Show Time
         layout = new BorderPane();
         layout.setTop(menuBar);
