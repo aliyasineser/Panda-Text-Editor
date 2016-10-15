@@ -1,14 +1,18 @@
 package text.editor.project;
 
+
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.*;
-import javafx.scene.layout.StackPane;
-import javafx.stage.Stage;
+import javafx.stage.*;
 import javafx.scene.web.HTMLEditor;
+import java.io.*;
 import javafx.scene.layout.*;
 
 /**
@@ -21,6 +25,8 @@ public class TextEditorProject extends Application {
     BorderPane layout;
     
     
+    private Desktop desktop = Desktop.getDesktop();
+    
     @Override
     public void start(Stage primaryStage) {
        
@@ -29,7 +35,18 @@ public class TextEditorProject extends Application {
         MenuItem newFile = new MenuItem("New...");
         newFile.setOnAction(e -> System.out.println("Create a new file..."));
         fileMenu.getItems().add(newFile);
-        fileMenu.getItems().add(new MenuItem("Open..."));
+        
+        MenuItem openFile = new MenuItem("Open...");
+        fileMenu.getItems().add(openFile);
+        openFile.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            File file = fileChooser.showOpenDialog(window);
+            if (file != null) {
+                openFile(file);
+            }
+        });
+        
+        
         fileMenu.getItems().add(new MenuItem("Save..."));
         fileMenu.getItems().add(new MenuItem("Save to..."));
         fileMenu.getItems().add(new SeparatorMenuItem());
@@ -37,6 +54,8 @@ public class TextEditorProject extends Application {
         fileMenu.getItems().add(new MenuItem("Print"));
         fileMenu.getItems().add(new SeparatorMenuItem());
         fileMenu.getItems().add(new MenuItem("Exit"));
+        
+        
         
         //Main menu bar
         MenuBar menuBar = new MenuBar();
@@ -46,6 +65,7 @@ public class TextEditorProject extends Application {
         final HTMLEditor htmlEditor = new HTMLEditor();
         
         htmlEditor.setPrefHeight(400);  
+        
         
         // Sol tarafa File Explorer set et !!! 
         
@@ -65,6 +85,19 @@ public class TextEditorProject extends Application {
      */
     public static void main(String[] args) {
         launch(args);
+    }
+    
+    
+    private void openFile(File file){
+//        try {
+//            desktop.open(file);
+//        } catch (Exception ex) {
+//            Logger.getLogger(
+//                TextEditorProject.class.getName()).log(
+//                    Level.SEVERE, null, ex
+//                );
+//        }
+        
     }
     
 }
