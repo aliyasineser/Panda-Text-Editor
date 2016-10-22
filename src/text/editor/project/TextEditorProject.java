@@ -58,8 +58,15 @@ public class TextEditorProject extends Application {
             }
         });
 
-        fileMenu.getItems().add(new MenuItem("Save to directory"));
-        fileMenu.getItems().add(new MenuItem("Save to FTP"));
+        MenuItem ftpSaveItem = new MenuItem("Save to FTP");
+        fileMenu.getItems().add(ftpSaveItem);
+        ftpSaveItem.setOnAction(e -> {
+            FtpBox.display();
+            
+        });
+        
+        
+        
         fileMenu.getItems().add(new SeparatorMenuItem());
         fileMenu.getItems().add(new MenuItem("Settings"));
         MenuItem print = new MenuItem("Print");
@@ -124,10 +131,13 @@ public class TextEditorProject extends Application {
                 new File(System.getProperty("user.home"), "/Desktop"));
 
         FileChooser.ExtensionFilter txtFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        FileChooser.ExtensionFilter ptfFilter = new FileChooser.ExtensionFilter("PTF files (*.ptf)", "*.ptf");
         FileChooser.ExtensionFilter allFilter = new FileChooser.ExtensionFilter("All files (*)", "*");
 
+        fileChooser.getExtensionFilters().add(ptfFilter);
         fileChooser.getExtensionFilters().add(txtFilter);
         fileChooser.getExtensionFilters().add(allFilter);
+        
     }
 
     private static void configureFileChooserSave(final FileChooser fileChooser) {
@@ -135,7 +145,7 @@ public class TextEditorProject extends Application {
         fileChooser.setInitialDirectory(
                 new File(System.getProperty("user.home"), "/Desktop"));
 
-        FileChooser.ExtensionFilter pteFilter = new FileChooser.ExtensionFilter("PTE files (*.pte)", "*.pte");
+        FileChooser.ExtensionFilter pteFilter = new FileChooser.ExtensionFilter("PTF files (*.ptf)", "*.ptf");
         fileChooser.getExtensionFilters().add(pteFilter);
 
     }
