@@ -6,11 +6,15 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.print.PrinterJob;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.web.HTMLEditor;
 import javafx.stage.FileChooser;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
@@ -45,9 +49,11 @@ public class EditorController implements Initializable {
     private void openFile(File file) {
         try {
             desktop.open(file);
+
         } catch (Exception ex) {
             Logger.getLogger(
-                    TextEditor.class.getName()).log(
+                    TextEditor.class
+                    .getName()).log(
                             Level.SEVERE, null, ex
                     );
         }
@@ -62,12 +68,22 @@ public class EditorController implements Initializable {
 
         if (file != null) {
             // Buraya save islemi yapilacak
+        } else {
+            // Buraya, elimizde yeni dosya olusturacak kod eklenecek
         }
     }
 
-    public void saveToFTP() {
+    public void saveToFTP() throws Exception {
 
-        FtpBox.display();
+        Stage secondWindow = new Stage();
+        secondWindow.initModality(Modality.APPLICATION_MODAL);
+        secondWindow.setTitle("FTP Information");
+
+        Parent ftpSaveLayout = FXMLLoader.load(getClass().getResource("FtpBoxDesign.fxml"));
+
+        Scene scene = new Scene(ftpSaveLayout);
+        secondWindow.setScene(scene);
+        secondWindow.showAndWait();
 
     }
 
