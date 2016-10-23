@@ -1,4 +1,4 @@
-package text.editor.project;
+package editor;
 
 import javafx.stage.*;
 import javafx.scene.*;

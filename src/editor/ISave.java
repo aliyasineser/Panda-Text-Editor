@@ -1,4 +1,4 @@
-package text.editor.project;
+package editor;
 
 /**
  *
