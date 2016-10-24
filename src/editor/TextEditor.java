@@ -13,6 +13,12 @@ import javafx.stage.Stage;
  */
 public class TextEditor extends Application {
 
+    public static String passwordOfTheUser;
+
+    public String getPasswordOfTheUser() {
+        return passwordOfTheUser;
+    }
+
     @Override
     public void start(Stage primaryStage) throws Exception {
         Parent root = FXMLLoader.load(getClass().getResource("EditorDesign.fxml"));

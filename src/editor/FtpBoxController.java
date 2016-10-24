@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -22,6 +23,12 @@ public class FtpBoxController implements Initializable {
     public VBox ftpScene;
     public Button cancelButton;
     public Button saveButton;
+    public TextField ipText;
+    public TextField portText;
+    public TextField idText;
+    public TextField passText;
+    public TextField fileNameText;
+    
 
     /**
      * Initializes the controller class.
@@ -29,6 +36,8 @@ public class FtpBoxController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        
+        
     }
 
     public void save() {
