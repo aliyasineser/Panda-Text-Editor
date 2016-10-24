@@ -79,15 +79,17 @@ public class FtpSave implements ISave {
         this.path = path;
     }
 
-    public String uploadToFTP(String ipAddress, int portNumber, String userID, String userPass, String path){
+    public  String uploadToFTP(String ipAddress, String portNumber, String userID, String userPass, String path){
             
          // get an ftpClient object
         FTPClient ftpClient = new FTPClient();
         FileInputStream inputStream = null;
 
+        int stringtToIntForPortNumber = Integer.parseInt(portNumber);    
+        
         try {
             // pass directory path on server to connect
-            ftpClient.connect(ipAddress, portNumber);
+            ftpClient.connect(ipAddress, stringtToIntForPortNumber);
 
             // pass username and password, returned true if authentication is
             // successful
@@ -97,21 +99,20 @@ public class FtpSave implements ISave {
                 System.out.println("Connection established...");
                 inputStream = new FileInputStream(path);
 
-                boolean uploaded = ftpClient.storeFile("uploadedFile.txt",
-                        inputStream);
+                boolean uploaded = ftpClient.storeFile(path,inputStream);
                 if (uploaded) {
-                    System.out.println("File uploaded successfully !");
+                    System.out.println("File uploaded successfully!");
                 } else {
-                    System.out.println("Error in uploading file !");
+                    System.out.println("Error in uploading file!");
                 }
 
                 // logout the user, returned true if logout successfully
                 boolean logout = ftpClient.logout();
                 if (logout) {
-                    System.out.println("Connection close...");
+                    System.out.println("Connection close..");
                 }
             } else {
-                System.out.println("Connection fail...");
+                System.out.println("Connection fail..");
             }
 
         } catch (SocketException e) {
@@ -129,11 +130,7 @@ public class FtpSave implements ISave {
         
         
           return "";
-    
-        
     }
-    
-  
     
 
 }
