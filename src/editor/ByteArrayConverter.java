@@ -5,7 +5,7 @@ import java.io.*;
  *
  * @author Kaan Ucar
  */
-public class ByteArrayConverter {
+public final class ByteArrayConverter {
     public static Object convertFromByteArray(byte[] byteObject) {
         try{
             ByteArrayInputStream bais = new ByteArrayInputStream(byteObject);
