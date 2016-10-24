@@ -32,7 +32,8 @@ public class FtpBoxController implements Initializable {
     }
 
     public void save() {
-
+        FtpSave saveFile;
+//        saveFile.uploadToFTP(, , , , );
         ((Stage) (ftpScene.getScene().getWindow())).close();
     }
 
