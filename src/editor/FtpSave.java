@@ -6,6 +6,8 @@ package editor;
  */
 public class FtpSave implements ISave{
     
+    
+    
     // Eda will implement here
     
   
