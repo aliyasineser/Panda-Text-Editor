@@ -21,8 +21,6 @@ public class FtpSave implements ISave {
     String userPass;
     String path;
 
-    
-    
     public FtpSave() {
         this.ipAddress = "";
         this.portNumber = 0;
@@ -79,14 +77,14 @@ public class FtpSave implements ISave {
         this.path = path;
     }
 
-    public  String uploadToFTP(String ipAddress, String portNumber, String userID, String userPass, String path){
-            
-         // get an ftpClient object
+    public String uploadToFTP(String ipAddress, String portNumber, String userID, String userPass, String path) {
+
+        // get an ftpClient object
         FTPClient ftpClient = new FTPClient();
         FileInputStream inputStream = null;
 
-        int stringtToIntForPortNumber = Integer.parseInt(portNumber);    
-        
+        int stringtToIntForPortNumber = Integer.parseInt(portNumber);
+
         try {
             // pass directory path on server to connect
             ftpClient.connect(ipAddress, stringtToIntForPortNumber);
@@ -99,7 +97,7 @@ public class FtpSave implements ISave {
                 System.out.println("Connection established...");
                 inputStream = new FileInputStream(path);
 
-                boolean uploaded = ftpClient.storeFile(path,inputStream);
+                boolean uploaded = ftpClient.storeFile(path, inputStream);
                 if (uploaded) {
                     System.out.println("File uploaded successfully!");
                 } else {
@@ -126,11 +124,8 @@ public class FtpSave implements ISave {
                 e.printStackTrace();
             }
         }
-        
-        
-        
-          return "";
+
+        return "";
     }
-    
 
 }
