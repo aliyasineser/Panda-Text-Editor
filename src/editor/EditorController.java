@@ -2,20 +2,27 @@ package editor;
 
 import java.awt.Desktop;
 import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.print.PrinterJob;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextAreaBuilder;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.web.HTMLEditor;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
+import javax.swing.text.Document;
 
 /**
  *
@@ -23,10 +30,20 @@ import javafx.stage.Stage;
  */
 public class EditorController implements Initializable {
 
-    Stage window;
+    private Stage window;
     private Desktop desktop = Desktop.getDesktop();
     public BorderPane borderPane;
     final HTMLEditor htmlEditor = new HTMLEditor();
+
+    private Open open = new Open();
+    
+    final Label labelFile = new Label();
+    
+    final TextArea textArea = TextAreaBuilder.create()
+                .prefWidth(400)
+                .wrapText(true)
+                .build();
+    
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -36,29 +53,22 @@ public class EditorController implements Initializable {
 
     }
 
+    
+    
     public void openTextFile() {
+        
         FileChooser fileChooser = new FileChooser();
         configureFileChooserOpen(fileChooser);
         File file = fileChooser.showOpenDialog(window);
+        labelFile.setText(file.getPath());  
 
         if (file != null) {
-            openFile(file);
+            htmlEditor.setHtmlText(open.readFile(file));
         }
+        
     }
 
-    private void openFile(File file) {
-        try {
-            desktop.open(file);
-
-        } catch (Exception ex) {
-            Logger.getLogger(
-                    TextEditor.class
-                    .getName()).log(
-                            Level.SEVERE, null, ex
-                    );
-        }
-
-    }
+    
 
     public void saveTextFile() {
 
