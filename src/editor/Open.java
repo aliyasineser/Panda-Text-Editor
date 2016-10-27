@@ -20,7 +20,10 @@ import javafx.scene.layout.VBoxBuilder;
 import javafx.stage.FileChooser;
 
 /**
- *
+ *sifrelemeler eklenecek 
+ * sifre kontrolleri eklenecek
+ * ekrana basarken \n algilamiyor
+ * 
  * @author ilayda
  */
 public class Open {
@@ -61,6 +64,7 @@ public class Open {
             String text;
             while ((text = bufferedReader.readLine()) != null) {
                 stringBuffer.append(text);
+                stringBuffer.append("\n");
             }
  
         } catch (FileNotFoundException ex) {
@@ -74,7 +78,7 @@ public class Open {
                 Logger.getLogger(Open.class.getName()).log(Level.SEVERE, null, ex);
             }
         } 
-         
+         //System.out.print( stringBuffer.toString());
         return stringBuffer.toString();
     }
     
