@@ -1,9 +1,14 @@
 package editor;
 
+
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.Paths;
 import java.util.ResourceBundle;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -29,7 +34,7 @@ import javax.swing.text.Document;
  * @author aliya
  */
 public class EditorController implements Initializable {
-
+    
     private Stage window;
     private Desktop desktop = Desktop.getDesktop();
     public BorderPane borderPane;
@@ -44,7 +49,10 @@ public class EditorController implements Initializable {
                 .wrapText(true)
                 .build();
     
-
+    // son girilen directory ve passwordler sayesinde ctrl+s ile hızlıca kayıt yapılabilecek
+    private String lastDirectory = null;
+    private String lastPassword = null;
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -53,33 +61,88 @@ public class EditorController implements Initializable {
 
     }
 
-    
+    public String askPassword(){
+        // girilen passwordu return et
+        // cancel edilince null return et
+        
+        return new String();
+    }
     
     public void openTextFile() {
         
         FileChooser fileChooser = new FileChooser();
         configureFileChooserOpen(fileChooser);
         File file = fileChooser.showOpenDialog(window);
-        labelFile.setText(file.getPath());  
-
-        if (file != null) {
-            htmlEditor.setHtmlText(open.readFile(file));
+        labelFile.setText(file.getPath());
+        
+        try{
+            if(file.getName().endsWith(".ptf")){
+                Path path = Paths.get(file.getPath());
+                
+                byte[] encryptedBytes = Files.readAllBytes(path);
+                String password = askPassword();
+                if(password == null)
+                    return;
+                byte[] decryptedBytes = Cryption.decryptFile(encryptedBytes, password);
+                        
+                        
+                while(decryptedBytes == null && password != null){
+                    // sifre yanlis tekrar sor
+                    password = askPassword();
+                    decryptedBytes = Cryption.decryptFile(encryptedBytes, password);
+                }
+                
+                String txt = (String)(ByteArrayConverter.convertFromByteArray(decryptedBytes));
+                htmlEditor.setHtmlText(txt);
+                lastDirectory = file.getPath();
+            }
+            else{
+                htmlEditor.setHtmlText(open.readFile(file));
+                lastDirectory = null;
+            }
+        }
+        catch(Exception ex){
+            //Dosyayı acamadı hata ver
         }
         
     }
 
+    public void saveTextFile(String directory) {
+        File file = new File(directory);
+        
+        if (file != null) {
+            String password = askPassword();
+            DirSave dirSave = new DirSave(file.getPath(), htmlEditor.getHtmlText(), password);
+            if(dirSave.save()){
+                lastDirectory = dirSave.getDirectory();
+                lastPassword = dirSave.getPassword();
+            }
+            else{
+                // dosyayı kaydedemedi hata ver
+            }
+        } else {
+            // Buraya, elimizde yeni dosya olusturacak kod eklenecek
+        }
+    }
     
-
     public void saveTextFile() {
 
         FileChooser fileChooser = new FileChooser();
         configureFileChooserSave(fileChooser);
         File file = fileChooser.showSaveDialog(window);
-
-        if (file != null) {
-            // Buraya save islemi yapilacak
-        } else {
-            // Buraya, elimizde yeni dosya olusturacak kod eklenecek
+        saveTextFile(file.toString() + ".ptf");
+                
+    }
+    
+    // bu fonksiyon ctrl+S icin
+    public void quickSaveTextFile(){
+        if(lastDirectory == null)
+            saveTextFile();
+        else if(lastPassword == null)
+            saveTextFile(lastDirectory);
+        else{
+            DirSave dirSave = new DirSave(lastDirectory, htmlEditor.getHtmlText(),lastPassword);
+            dirSave.save();
         }
     }
 
