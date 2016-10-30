@@ -5,11 +5,16 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.awt.Desktop;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.print.PrinterJob;
@@ -40,7 +45,6 @@ public class EditorController implements Initializable {
     public BorderPane borderPane;
     final HTMLEditor htmlEditor = new HTMLEditor();
 
-    private Open open = new Open();
     
     final Label labelFile = new Label();
     
@@ -61,12 +65,57 @@ public class EditorController implements Initializable {
 
     }
 
+       
     public String askPassword(){
         // girilen passwordu return et
         // cancel edilince null return et
         
+               // girilen passwordu return et
+        // cancel edilince null return et
+        try {
+            Stage passWindow = new Stage();
+            passWindow.initModality(Modality.APPLICATION_MODAL);
+            passWindow.setTitle("password");
+
+            Parent passLayout = FXMLLoader.load(getClass().getResource("PasswordDesign.fxml"));
+
+            Scene scene = new Scene(passLayout);
+            passWindow.setScene(scene);
+            passWindow.showAndWait();
+        } catch (Exception ex) {
+
+        }
+        
         return new String();
     }
+        public String readFile(File file){
+        StringBuilder stringBuffer = new StringBuilder();
+        BufferedReader bufferedReader = null;
+         
+        try {
+            bufferedReader = new BufferedReader(new FileReader(file));
+             
+            String text;
+            while ((text = bufferedReader.readLine()) != null) {
+                stringBuffer.append(text);
+                stringBuffer.append("\n");
+            }
+ 
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(EditorController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(EditorController.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                bufferedReader.close();
+            } catch (IOException ex) {
+                Logger.getLogger(EditorController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } 
+         //System.out.print( stringBuffer.toString());
+        return stringBuffer.toString();
+    }
+    
     
     public void openTextFile() {
         
@@ -97,7 +146,7 @@ public class EditorController implements Initializable {
                 lastDirectory = file.getPath();
             }
             else{
-                htmlEditor.setHtmlText(open.readFile(file));
+                htmlEditor.setHtmlText(readFile(file));
                 lastDirectory = null;
             }
         }
