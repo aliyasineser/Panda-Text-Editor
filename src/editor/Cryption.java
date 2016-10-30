@@ -6,6 +6,13 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Random;
+import java.security.NoSuchAlgorithmException;
+import javax.crypto.NoSuchPaddingException;
+import java.security.InvalidKeyException;
+import java.security.InvalidAlgorithmParameterException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.BadPaddingException;
+
 /**
  *
  * @author Kaan Ucar
@@ -43,7 +50,11 @@ public class Cryption {
         return (new Cryption(fileBytes, strPassword)).encrypt();
     }
     
-    public static byte[] decryptFile(byte[] fileBytes, String strPassword) {
+    public static byte[] decryptFile(byte[] fileBytes, String strPassword) 
+            throws NoSuchAlgorithmException, NoSuchPaddingException, 
+            InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException,
+            BadPaddingException
+    {
         final int INT_SIZE = 4;
         
         byte[] keyLengthBytes = Arrays.copyOfRange(fileBytes, 0, INT_SIZE);
@@ -83,8 +94,10 @@ public class Cryption {
         }
     }
 
-    public byte[] decrypt() {
-        try{
+    public byte[] decrypt() throws NoSuchAlgorithmException, NoSuchPaddingException, 
+            InvalidKeyException, InvalidAlgorithmParameterException, IllegalBlockSizeException,
+            BadPaddingException
+    {
             final int INT_SIZE = 4;
             
             Cipher cipher = Cipher.getInstance("AES/CTR/NoPadding");
@@ -99,9 +112,5 @@ public class Cryption {
                 return null;
             
             return cipher.doFinal(Arrays.copyOfRange(message, 2*INT_SIZE + keyLength + passwordLength, message.length));
-        }
-        catch(Exception ex){
-            return null;
-        }
     }
 }
