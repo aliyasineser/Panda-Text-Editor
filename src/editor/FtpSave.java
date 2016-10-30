@@ -21,6 +21,11 @@ public class FtpSave implements ISave {
     String userPass;
     String path;
 
+    public boolean save(){
+        // ISave
+        return false;
+    }
+    
     public FtpSave() {
         this.ipAddress = "";
         this.portNumber = 0;
