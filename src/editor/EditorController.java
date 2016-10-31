@@ -130,7 +130,7 @@ public class EditorController implements Initializable {
         FileChooser fileChooser = new FileChooser();
         configureFileChooserSave(fileChooser);
         File file = fileChooser.showSaveDialog(window);
-        saveTextFile(file.toString() + ".ptf");
+        saveTextFile(file.toString());
                 
     }
     
