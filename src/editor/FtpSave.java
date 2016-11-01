@@ -13,7 +13,7 @@ import org.apache.commons.net.ftp.FTPClient;
  *
  * @author aliyasineser
  */
-public class FtpSave implements ISave {
+public class FtpSave {
 
     String ipAddress;
     Integer portNumber;
