@@ -14,7 +14,8 @@
                     <items>
                         <MenuItem fx:id="newFile" mnemonicParsing="false" text="New.." />
                         <MenuItem fx:id="openFile" mnemonicParsing="false" onAction="#openTextFile" text="Open.." />
-                        <MenuItem fx:id="saveItem" mnemonicParsing="false" onAction="#saveTextFile" text="Save.." />
+                        <MenuItem fx:id="quickSaveItem" mnemonicParsing="false" onAction="#quickSaveTextFile" text="Save.." />
+                        <MenuItem fx:id="saveDirectoryItem" mnemonicParsing="false" onAction="#saveTextFile" text="Save to Directory" />
                         <MenuItem fx:id="ftpSaveItem" mnemonicParsing="false" onAction="#saveToFTP" text="Save to FTP" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem fx:id="print" mnemonicParsing="false" onAction="#printText" text="Print" />
