@@ -1,15 +1,19 @@
 package editor;
 
-
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.Path;
 import java.awt.Desktop;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Paths;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.print.PrinterJob;
@@ -39,8 +43,6 @@ public class EditorController implements Initializable {
     private Desktop desktop = Desktop.getDesktop();
     public BorderPane borderPane;
     final HTMLEditor htmlEditor = new HTMLEditor();
-
-    private Open open = new Open();
     
     final Label labelFile = new Label();
     
@@ -61,15 +63,14 @@ public class EditorController implements Initializable {
 
     }
 
-    public String askPassword(){
+    public static String askPassword(){
         // girilen passwordu return et
         // cancel edilince null return et
         
-        return new String();
+        return "pas";
     }
     
     public void openTextFile() {
-        
         FileChooser fileChooser = new FileChooser();
         configureFileChooserOpen(fileChooser);
         File file = fileChooser.showOpenDialog(window);
@@ -97,31 +98,54 @@ public class EditorController implements Initializable {
                 lastDirectory = file.getPath();
             }
             else{
-                htmlEditor.setHtmlText(open.readFile(file));
+                htmlEditor.setHtmlText(readFile(file));
                 lastDirectory = null;
             }
         }
         catch(Exception ex){
             //Dosyayı acamadı hata ver
-        }
-        
+        } 
     }
+    
+    public static String readFile(File file){
+        StringBuilder stringBuffer = new StringBuilder();
+        BufferedReader bufferedReader = null;
+         
+        try {
+            bufferedReader = new BufferedReader(new FileReader(file));
+             
+            String text;
+            while ((text = bufferedReader.readLine()) != null) {
+                stringBuffer.append(text);
+                stringBuffer.append("\n");
+            }
+ 
+        } catch (FileNotFoundException ex) {
+            // dosya bulamadı
+        } catch (IOException ex) {
+            // dosyayı acamadı
+        } finally {
+            try {
+                bufferedReader.close();
+            } catch (IOException ex) {
+                // dosyada hata var
+            }
+        } 
+         //System.out.print( stringBuffer.toString());
+        return stringBuffer.toString();
+    }
+    
 
     public void saveTextFile(String directory) {
         File file = new File(directory);
         
-        if (file != null) {
-            String password = askPassword();
-            DirSave dirSave = new DirSave(file.getPath(), htmlEditor.getHtmlText(), password);
-            if(dirSave.save()){
-                lastDirectory = dirSave.getDirectory();
-                lastPassword = dirSave.getPassword();
-            }
-            else{
-                // dosyayı kaydedemedi hata ver
-            }
-        } else {
-            // Buraya, elimizde yeni dosya olusturacak kod eklenecek
+        String password = askPassword();
+        if(DirSave.save(file, htmlEditor.getHtmlText(), password)){
+            lastDirectory = file.getPath();
+            lastPassword = password;
+        }
+        else{
+            // dosyayı kaydedemedi hata ver
         }
     }
     
@@ -130,7 +154,7 @@ public class EditorController implements Initializable {
         FileChooser fileChooser = new FileChooser();
         configureFileChooserSave(fileChooser);
         File file = fileChooser.showSaveDialog(window);
-        saveTextFile(file.toString());
+        saveTextFile(file.toString() + ".ptf");
                 
     }
     
@@ -140,9 +164,8 @@ public class EditorController implements Initializable {
             saveTextFile();
         else if(lastPassword == null)
             saveTextFile(lastDirectory);
-        else{
-            DirSave dirSave = new DirSave(lastDirectory, htmlEditor.getHtmlText(),lastPassword);
-            dirSave.save();
+        else if(!DirSave.save(new File(lastDirectory), htmlEditor.getHtmlText(),lastPassword)){
+            //password yanlıs
         }
     }
 
@@ -192,10 +215,9 @@ public class EditorController implements Initializable {
     public void printText() {
         PrinterJob job = PrinterJob.createPrinterJob();
         if (job != null) {
-            if  (job.showPrintDialog(null)) {
-                htmlEditor.print(job);
-                job.endJob();
-            }
+            job.showPrintDialog(null);
+            htmlEditor.print(job);
+            job.endJob();
         }
     }
 
