@@ -70,6 +70,11 @@ public class EditorController implements Initializable {
         return "pas";
     }
     
+    public void newTextFile() {
+        htmlEditor.setHtmlText("");
+        lastDirectory = null;
+    }
+    
     public void openTextFile() {
         FileChooser fileChooser = new FileChooser();
         configureFileChooserOpen(fileChooser);
