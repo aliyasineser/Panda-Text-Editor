@@ -20,11 +20,6 @@ public class FtpSave implements ISave {
     String userID;
     String userPass;
     String path;
-
-    public boolean save(){
-        // ISave
-        return false;
-    }
     
     public FtpSave() {
         this.ipAddress = "";
