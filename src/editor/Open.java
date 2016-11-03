@@ -20,13 +20,13 @@ import javafx.scene.layout.VBoxBuilder;
 import javafx.stage.FileChooser;
 
 /**
- * sifrelemeler eklenecek sifre kontrolleri eklenecek ekrana basarken \n
- * algilamiyor
- *
+ * sifrelemeler eklenecek 
+ * sifre kontrolleri eklenecek
+ * ekrana basarken \n algilamiyor
+ * 
  * @author ilayda
  */
 public class Open {
-
     private TextArea text;
     private String password;
 
@@ -34,7 +34,9 @@ public class Open {
         this.text = null;
         this.password = null;
     }
-
+    
+    
+    
     public void setText(TextArea text) {
         this.text = text;
     }
@@ -50,20 +52,21 @@ public class Open {
     public String getPassword() {
         return password;
     }
-
-    public String readFile(File file) {
+    
+    
+    public String readFile(File file){
         StringBuilder stringBuffer = new StringBuilder();
         BufferedReader bufferedReader = null;
-
+         
         try {
             bufferedReader = new BufferedReader(new FileReader(file));
-
+             
             String text;
             while ((text = bufferedReader.readLine()) != null) {
                 stringBuffer.append(text);
                 stringBuffer.append("\n");
             }
-
+ 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Open.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
@@ -74,13 +77,17 @@ public class Open {
             } catch (IOException ex) {
                 Logger.getLogger(Open.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
-        //System.out.print( stringBuffer.toString());
+        } 
+         //System.out.print( stringBuffer.toString());
         return stringBuffer.toString();
     }
-
-    public boolean ControlPassword() {
+    
+    
+    public boolean ControlPassword(){
         return false;
     }
-
+    
+    
+    
+ 
 }
