@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.paint.*?>
+
+<BorderPane fx:id="borderPane" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="400.0" minWidth="600.0" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: ;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="editor.EditorController">
+    <top>
+        <MenuBar fx:id="menuBar" BorderPane.alignment="CENTER">
+            <menus>
+                <Menu fx:id="fileMenu" mnemonicParsing="false" text="File">
+                    <items>
+                        <MenuItem fx:id="newFile" mnemonicParsing="false" onAction="#newTextFile" text="New.." accelerator="Shortcut+N" />
+                        <MenuItem fx:id="openFile" mnemonicParsing="false" onAction="#openTextFile" text="Open.." accelerator="Shortcut+O" />
+                        <MenuItem fx:id="quickSaveItem" mnemonicParsing="false" onAction="#quickSaveTextFile" text="Save.." accelerator="Shortcut+S" />
+                        <MenuItem fx:id="saveDirectoryItem" mnemonicParsing="false" onAction="#saveTextFile" text="Save to Directory" />
+                        <MenuItem fx:id="ftpSaveItem" mnemonicParsing="false" onAction="#saveToFTP" text="Save to FTP" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="print" mnemonicParsing="false" onAction="#printText" text="Print" accelerator="Shortcut+P" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="settingsItem" mnemonicParsing="false" text="Settings" />
+                        <MenuItem fx:id="exitItem" mnemonicParsing="false" onAction="#closeProgram" text="Exit" accelerator="Shortcut+E" />
+                    </items>
+                </Menu>
+                <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
+                    <items>
+                        <MenuItem fx:id="deleteItem" mnemonicParsing="false" text="Delete" />
+                    </items>
+                </Menu>
+                <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem fx:id="aboutItem" mnemonicParsing="false" text="About" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+    </top>
+</BorderPane>
