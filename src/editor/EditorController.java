@@ -220,9 +220,10 @@ public class EditorController implements Initializable {
     public void printText() {
         PrinterJob job = PrinterJob.createPrinterJob();
         if (job != null) {
-            job.showPrintDialog(null);
-            htmlEditor.print(job);
-            job.endJob();
+            if (job.showPrintDialog(null))  {
+                htmlEditor.print(job);
+                job.endJob();           
+            }
         }
     }
 
