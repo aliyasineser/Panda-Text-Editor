@@ -7,9 +7,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<VBox fx:id="ftpScene" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="254.0" prefWidth="563.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="editor.FtpBoxController">
+<VBox fx:id="ftpScene" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="315.0" prefWidth="650.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="editor.FtpBoxController">
    <children>
-      <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="206.0" prefWidth="502.0">
+      <GridPane alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="226.0" prefWidth="646.0">
          <children>
             <Label fx:id="ipLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="20.0" prefWidth="100.0" text="IP:" textAlignment="CENTER" />
             <Label fx:id="portLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="20.0" prefWidth="100.0" text="Port:" textAlignment="CENTER" GridPane.rowIndex="1" />
@@ -18,13 +18,16 @@
             <TextField fx:id="ipText" promptText="127.0.0.1" GridPane.columnIndex="1" />
             <TextField fx:id="portText" promptText="8000" GridPane.columnIndex="1" GridPane.rowIndex="1" />
             <TextField fx:id="idText" promptText="User Name" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="21.0" prefWidth="27.0" text="*" textAlignment="CENTER" textFill="RED" GridPane.columnIndex="2" />
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="21.0" prefWidth="22.0" text="*" textAlignment="CENTER" textFill="RED" GridPane.columnIndex="2" />
             <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="21.0" prefWidth="22.0" text="*" textAlignment="CENTER" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="21.0" prefWidth="30.0" text="*" textAlignment="CENTER" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <Label fx:id="fileNameLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="20.0" prefWidth="100.0" text="File Name:" textAlignment="CENTER" GridPane.rowIndex="4" />
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="21.0" prefWidth="22.0" text="*" textAlignment="CENTER" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <Label fx:id="fileNameLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="25.0" prefWidth="100.0" text="File Name:" textAlignment="CENTER" GridPane.rowIndex="4" />
             <TextField fx:id="fileNameText" promptText="Name you desire" GridPane.columnIndex="1" GridPane.rowIndex="4" />
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="21.0" prefWidth="27.0" text="*" textAlignment="CENTER" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="21.0" prefWidth="22.0" text="*" textAlignment="CENTER" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="5" />
             <PasswordField fx:id="passText" promptText="Password" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+            <Label fx:id="filePassLabel" alignment="CENTER" contentDisplay="CENTER" prefHeight="20.0" prefWidth="100.0" text="File Password:" textAlignment="CENTER" GridPane.rowIndex="5" />
+            <PasswordField fx:id="filePassText" promptText="Password" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="21.0" prefWidth="22.0" text="*" textAlignment="CENTER" textFill="RED" GridPane.columnIndex="2" GridPane.rowIndex="4" />
          </children>
          <columnConstraints>
             <ColumnConstraints hgrow="SOMETIMES" maxWidth="185.0" minWidth="10.0" prefWidth="146.0" />
@@ -39,15 +42,17 @@
          </padding>
          <rowConstraints>
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
-            <RowConstraints maxHeight="38.0" minHeight="10.0" prefHeight="37.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="42.0" minHeight="10.0" prefHeight="36.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="45.0" minHeight="10.0" prefHeight="38.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="45.0" minHeight="10.0" prefHeight="32.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="45.0" minHeight="10.0" prefHeight="40.0" vgrow="SOMETIMES" />
+            <RowConstraints maxHeight="43.0" minHeight="10.0" prefHeight="29.0" vgrow="SOMETIMES" />
          </rowConstraints>
       </GridPane>
-      <HBox prefHeight="100.0" prefWidth="200.0" spacing="2.0">
+      <Region prefHeight="25.0" prefWidth="642.0" />
+      <HBox prefHeight="39.0" prefWidth="607.0" spacing="2.0">
          <children>
-            <Region prefHeight="31.0" prefWidth="87.0" />
+            <Region prefHeight="31.0" prefWidth="127.0" />
             <Button fx:id="saveButton" mnemonicParsing="false" onAction="#save" prefHeight="31.0" prefWidth="118.0" text="Save" />
             <Region prefHeight="31.0" prefWidth="95.0" />
             <Button fx:id="cancelButton" mnemonicParsing="false" onAction="#cancel" prefHeight="31.0" prefWidth="118.0" text="Cancel" />

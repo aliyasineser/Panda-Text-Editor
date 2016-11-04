@@ -11,7 +11,7 @@
 
 <GridPane hgap="14.0" maxHeight="+Infinity" maxWidth="+Infinity" minHeight="-Infinity" minWidth="-Infinity" vgap="20.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
   <children>
-    <ImageView fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="TOP">
+    <ImageView fx:id="errImage" fitHeight="60.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="0" GridPane.halignment="CENTER" GridPane.rowIndex="0" GridPane.valignment="TOP">
       <image>
         <!-- place holder -->
       </image>
@@ -38,11 +38,6 @@
           </HBox.margin>
         </HBox>
         <Pane maxWidth="+Infinity" HBox.hgrow="ALWAYS" />
-        <Button fx:id="cancelButton" cancelButton="true" minWidth="80.0" mnemonicParsing="false" text="Cancel" HBox.hgrow="NEVER">
-          <HBox.margin>
-            <Insets />
-          </HBox.margin>
-        </Button>
         <HBox fx:id="okParent" alignment="CENTER">
           <children>
             <Button fx:id="okButton" minWidth="80.0" mnemonicParsing="false" text="Ok" HBox.hgrow="NEVER">

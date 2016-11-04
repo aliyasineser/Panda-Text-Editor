@@ -9,6 +9,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -26,8 +27,9 @@ public class FtpBoxController implements Initializable {
     public TextField ipText;
     public TextField portText;
     public TextField idText;
-    public TextField passText;
+    public PasswordField passText;
     public TextField fileNameText;
+    public PasswordField filePassText;
 
     /**
      * Initializes the controller class.
@@ -41,7 +43,7 @@ public class FtpBoxController implements Initializable {
     public void save() {
         FtpSave saveFile;
 //        saveFile.uploadToFTP(, , , , );
-
+        System.err.println(passText.getText() + "\n" + filePassText.getText());
         ((Stage) (ftpScene.getScene().getWindow())).close();
     }
 

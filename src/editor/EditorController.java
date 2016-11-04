@@ -10,6 +10,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.util.Enumeration;
 import java.util.ResourceBundle;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -173,7 +174,7 @@ public class EditorController implements Initializable {
         if(file.getName().lastIndexOf('.') != -1)
             directory = directory.substring(0, directory.lastIndexOf('.'));
             
-        //System.err.println(directory + fileChooser.getSelectedExtensionFilter());
+        
         saveTextFile(directory + ".ptf");
     }
     
@@ -214,6 +215,8 @@ public class EditorController implements Initializable {
 
         Parent ftpSaveLayout = FXMLLoader.load(getClass().getResource("FtpBoxDesign.fxml"));
 
+        
+        
         Scene scene = new Scene(ftpSaveLayout);
         secondWindow.setScene(scene);
         secondWindow.showAndWait();
