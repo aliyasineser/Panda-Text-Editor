@@ -173,6 +173,7 @@ public class EditorController implements Initializable {
         if(file.getName().lastIndexOf('.') != -1)
             directory = directory.substring(0, directory.lastIndexOf('.'));
             
+        //System.err.println(directory + fileChooser.getSelectedExtensionFilter());
         saveTextFile(directory + ".ptf");
     }
     
@@ -189,6 +190,8 @@ public class EditorController implements Initializable {
             // dosyayı kaydedemedi hata ver
         }
     }
+    
+    
     
     // bu fonksiyon ctrl+S icin
     public void quickSaveTextFile(){
