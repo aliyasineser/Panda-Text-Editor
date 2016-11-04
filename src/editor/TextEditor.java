@@ -15,7 +15,7 @@ public class TextEditor extends Application {
 
     public static String passwordOfTheUser;
 
-    public String getPasswordOfTheUser() {
+    public static String getPasswordOfTheUser() {
         return passwordOfTheUser;
     }
 

@@ -216,7 +216,6 @@ public class EditorController implements Initializable {
         Parent ftpSaveLayout = FXMLLoader.load(getClass().getResource("FtpBoxDesign.fxml"));
 
         
-        
         Scene scene = new Scene(ftpSaveLayout);
         secondWindow.setScene(scene);
         secondWindow.showAndWait();
