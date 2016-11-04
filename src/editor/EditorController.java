@@ -54,6 +54,7 @@ public class EditorController implements Initializable {
     // son girilen directory ve passwordler sayesinde ctrl+s ile hızlıca kayıt yapılabilecek
     private String lastDirectory = null;
     private String lastPassword = null;
+    private String lastText;
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -61,6 +62,7 @@ public class EditorController implements Initializable {
         htmlEditor.setPrefHeight(400);
         borderPane.setCenter(htmlEditor);
 
+        lastText = htmlEditor.getHtmlText();
     }
 
     public static String askPassword(){
@@ -71,14 +73,37 @@ public class EditorController implements Initializable {
     }
     
     public void newTextFile() {
+        if(isTextChanged() && askSaveChanges())
+            saveTextFile();
+        
         htmlEditor.setHtmlText("");
+        lastText = "";
         lastDirectory = null;
     }
     
+    private boolean isTextChanged(){
+        return !(htmlEditor.getHtmlText().equals(lastText));
+    }
+    
+    // You did not save your last changes. Do you want to save them?
+    public boolean askSaveChanges(){
+        // return true for yes
+        // return false for no
+        
+        return false;
+    }
+    
     public void openTextFile() {
+        if(isTextChanged() && askSaveChanges())
+            saveTextFile();
+        
         FileChooser fileChooser = new FileChooser();
         configureFileChooserOpen(fileChooser);
         File file = fileChooser.showOpenDialog(window);
+        
+        if(file == null)
+            return; // path secimi iptal edildi
+        
         labelFile.setText(file.getPath());
         
         try{
@@ -106,6 +131,8 @@ public class EditorController implements Initializable {
                 htmlEditor.setHtmlText(readFile(file));
                 lastDirectory = null;
             }
+            
+            lastText = htmlEditor.getHtmlText();
         }
         catch(Exception ex){
             //Dosyayı acamadı hata ver
@@ -140,7 +167,23 @@ public class EditorController implements Initializable {
         return stringBuffer.toString();
     }
     
+    public void saveTextFile() {
 
+        FileChooser fileChooser = new FileChooser();
+        configureFileChooserSave(fileChooser);
+        File file = fileChooser.showSaveDialog(window);
+        
+        if(file == null)
+            return; // path secimi iptal edildi
+        
+        String directory = file.toString();
+        
+        if(file.getName().lastIndexOf('.') != -1)
+            directory = directory.substring(0, directory.lastIndexOf('.'));
+            
+        saveTextFile(directory + ".ptf");
+    }
+    
     public void saveTextFile(String directory) {
         File file = new File(directory);
         
@@ -148,19 +191,11 @@ public class EditorController implements Initializable {
         if(DirSave.save(file, htmlEditor.getHtmlText(), password)){
             lastDirectory = file.getPath();
             lastPassword = password;
+            lastText = htmlEditor.getHtmlText();
         }
         else{
             // dosyayı kaydedemedi hata ver
         }
-    }
-    
-    public void saveTextFile() {
-
-        FileChooser fileChooser = new FileChooser();
-        configureFileChooserSave(fileChooser);
-        File file = fileChooser.showSaveDialog(window);
-        saveTextFile(file.toString() + ".ptf");
-                
     }
     
     // bu fonksiyon ctrl+S icin
@@ -172,6 +207,8 @@ public class EditorController implements Initializable {
         else if(!DirSave.save(new File(lastDirectory), htmlEditor.getHtmlText(),lastPassword)){
             //password yanlıs
         }
+        else
+            lastText = htmlEditor.getHtmlText();
     }
 
     public void saveToFTP() throws Exception {
@@ -204,6 +241,9 @@ public class EditorController implements Initializable {
     }
 
     public void closeProgram() {
+        if(isTextChanged() && askSaveChanges())
+            saveTextFile();
+        
         ((Stage) (borderPane.getScene().getWindow())).close();
     }
 
