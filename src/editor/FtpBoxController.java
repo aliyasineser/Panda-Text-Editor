@@ -28,7 +28,6 @@ public class FtpBoxController implements Initializable {
     public TextField idText;
     public TextField passText;
     public TextField fileNameText;
-    
 
     /**
      * Initializes the controller class.
@@ -36,13 +35,13 @@ public class FtpBoxController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        
-        
+
     }
 
     public void save() {
         FtpSave saveFile;
 //        saveFile.uploadToFTP(, , , , );
+
         ((Stage) (ftpScene.getScene().getWindow())).close();
     }
 

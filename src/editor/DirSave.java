@@ -13,7 +13,7 @@ public class DirSave{
         return save(file, ByteArrayConverter.convertToByteArray(object),password);
     }
     
-    public static boolean save(File file, byte[] bytes, String password){
+    private static boolean save(File file, byte[] bytes, String password){
         byte[] encryptedBytes = Cryption.encryptFile(bytes, password);
         if(encryptedBytes == null)
             return false;
