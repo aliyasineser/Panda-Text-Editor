@@ -20,7 +20,7 @@ import javafx.scene.layout.VBoxBuilder;
 import javafx.stage.FileChooser;
 
 /**
- *sifrelemeler eklenecek 
+ * sifrelemeler eklenecek 
  * sifre kontrolleri eklenecek
  * ekrana basarken \n algilamiyor
  * 

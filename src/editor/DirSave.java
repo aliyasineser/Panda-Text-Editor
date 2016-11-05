@@ -8,43 +8,23 @@ import java.io.IOException;
  *
  * @author Kaan Ucar
  */
-public class DirSave implements ISave{
-    private final String directory;
-    private final String password;
-    byte[] bytes;
-    
-    public DirSave(String dir, byte[] b, String psw){
-        directory = dir;
-        bytes = b;
-        password = psw;
+public class DirSave{
+    public static boolean save(File file, Object object, String password){
+        return save(file, ByteArrayConverter.convertToByteArray(object),password);
     }
     
-    public DirSave(String dir, Object object, String psw){
-        directory = dir;
-        bytes = ByteArrayConverter.convertToByteArray(object);
-        password = psw;
-    }
-    
-    public String getDirectory(){
-        return directory;
-    }
-    
-    public String getPassword(){
-        return password;
-    }
-    
-    public boolean save(){
+    private static boolean save(File file, byte[] bytes, String password){
         byte[] encryptedBytes = Cryption.encryptFile(bytes, password);
         if(encryptedBytes == null)
             return false;
         
         try{
-            Files.write(Paths.get(directory), encryptedBytes);
+            Files.write(Paths.get(file.getPath()), encryptedBytes);
         }
         catch(IOException ex){
             return false;
         }
-        
+            
         return true;
     }
 }

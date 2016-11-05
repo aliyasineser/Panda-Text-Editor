@@ -1,11 +1,23 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package editor;
 
+/**
+ *
+ * @author eda arikan
+ */
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.SocketException;
+import java.nio.file.FileSystemNotFoundException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
@@ -15,24 +27,27 @@ import org.apache.commons.net.ftp.FTPFileFilter;
  *
  * @author aliyasineser
  */
-public class FtpSave implements ISave {
+public class FtpSave {
 
-    //static final String fileError = "PANDA_TEXT_EDITOR_FILE_ERROR";
-    //static final String wrongPassword = "PANDA_TEXT_EDITOR_WRONG_PASSWORD";
     static final String fileUpdatedSuccessful = "PANDA_TEXT_EDITOR_FILE_UPLOADED_SUCCESSFUL";
     static final String fileUpdatedError = "PANDA_TEXT_EDITOR_FILE_UPLOADED_ERROR";
     static final String loginError = "PANDA_TEXT_EDITOR_FILE_LOGIN_ERROR";
     static final String logoutError = "PANDA_TEXT_EDITOR_FILE_LOGOUT_ERROR";
-    String returnState;
+    static final String emptyValueError = "PANDA_TEXT_EDITOR_FILE_NULL_VALUE_ERROR"; //for empty parameters
 
+    //these variables just for temporary directory and file 
+    final String createdDirName = "__DIRECTORY_SAVE___9199999";
+    final String createdFileName = "__SAVED_FILE__9199999";
+
+    String returnState;
     String ipAddress;
     Integer portNumber;
     String userID;
     String userPass;
     String path;
 
+    
     public boolean save() {
-        // ISave
         return false;
     }
 
@@ -92,52 +107,96 @@ public class FtpSave implements ISave {
         this.path = path;
     }
 
-    public String uploadToFTP(String ipAddress, String portNumber, String userID, String userPass, String newFileName, String filePassword) {
+    public String uploadToFTP(String ipAddress, String portNumber, String userID,
+                              String userPass, String newFileName, String htmlText, 
+                              String filePassword, String recordType) {
 
         // get an ftpClient object
         FTPClient ftpClient = new FTPClient();
         FileInputStream inputStream = null;
-        final String localFileName = newFileName;
+        String addedNumberToEnd = ""; //added different numbers to same file names
+       
+        //deleting spaces of end of word
+        newFileName = rtrim(newFileName);
+        newFileName = ltrim(newFileName);
         
-
-        int stringtToIntForPortNumber = Integer.parseInt(portNumber);
+        //localFileName is same with newFileName. But localFileName must be final for FTPFileFilter() function
+        final String localFileName = newFileName;
 
         try {
+
+            //clear spaces at end of variables
+            portNumber = rtrim(portNumber);
+            userID = rtrim(userID);
+            ipAddress = rtrim(ipAddress);
+            newFileName = rtrim(newFileName);
+
+            //clear spaces from start
+            portNumber = ltrim(portNumber);
+            userID = ltrim(userID);
+            ipAddress = ltrim(ipAddress);
+            newFileName = ltrim(newFileName);
+
+            //check empty values
+            if (ipAddress.isEmpty() || portNumber.isEmpty() || userID.isEmpty() || newFileName.isEmpty()) {
+                return emptyValueError;
+            }
+
+            //strint to int for port number
+            int stringtToIntForPortNumber = Integer.parseInt(portNumber);
+
             // pass directory path on server to connect
             ftpClient.connect(ipAddress, stringtToIntForPortNumber);
 
-            // pass username and password, returned true if authentication is
-            // successful
+            // pass username and password, returned true if authentication is successfull
             boolean login = ftpClient.login(userID, userPass);
 
+            //System.out.println("-" + userID + "-" + userPass + "-");
             if (login) {
-                //System.out.println("Connection established...");
-                inputStream = new FileInputStream(path);
+                //get the path of save location
+                Path getHomePath = Paths.get(System.getProperty("user.home") + File.separatorChar + "Documents");
 
-                //check the root file if the same file name exist
+                //create a directory
+                String directoryPath;
+                directoryPath = getHomePath.toString();
+                directoryPath += File.separatorChar + createdDirName;
+                new File(directoryPath).mkdir();
+
+                //create a file
+                String filePath;
+                filePath = directoryPath;
+                filePath += File.separatorChar + createdFileName + recordType;
+                File file = new File(filePath);
+
+                //before upload, save file
+                DirSave.save(file, htmlText, filePassword);
+
+                //for upload take the file to inputstream
+                inputStream = new FileInputStream(filePath);
+
+                //controle of same files name with remote server
                 FTPFileFilter filter = new FTPFileFilter() {
-
                     @Override
                     public boolean accept(FTPFile ftpFile) {
-
-                        return (ftpFile.isFile() && ftpFile.getName().startsWith(localFileName));
+                        return (ftpFile.isFile() && ftpFile.getName().contains(localFileName) && ftpFile.getName().startsWith(localFileName));
                     }
                 };
 
-                //uzantı ekle endswith()
                 //in root directory, if same file name exist then add a number to end of file name
                 FTPFile[] result = ftpClient.listFiles("/", filter);
-                if(result.length > 0)
-                {
-                    //change file name like file(1).txt
-                    newFileName = rtrim(newFileName);
-                    
+                if (result.length > 0) {
+                    //change file name like file(1).txt as added number
+                    newFileName += "(";
+                    newFileName += String.valueOf(result.length);
+                    newFileName += ")";
                 }
-                
-                
+
+                //add file name to record type 
+                newFileName += recordType;
+
+                //upload file to root directory
                 boolean uploaded = ftpClient.storeFile(newFileName, inputStream);
-                
-        
+
                 if (uploaded) {
                     returnState = fileUpdatedSuccessful;
                 } else {
@@ -146,13 +205,34 @@ public class FtpSave implements ISave {
 
                 // logout the user, returned true if logout successfully
                 boolean logout = ftpClient.logout();
+
+                inputStream.close();
+
+                //delete the saved file
+                File f = new File(directoryPath);
+                if (f.exists()) {
+                    deleteDirectory(f);
+                }
+
                 if (!logout) {
                     returnState = logoutError;
                 }
+
             } else {
                 returnState = loginError;
             }
 
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            return loginError;
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (FileSystemNotFoundException e) {
+            e.printStackTrace();
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         } catch (SocketException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -167,15 +247,39 @@ public class FtpSave implements ISave {
 
         return returnState;
     }
-    
-    
-    public static String rtrim(String s) {
-        int i = s.length()-1;
+
+    //clean spaces from end of string
+    private String rtrim(String s) {
+        int i = s.length() - 1;
         while (i >= 0 && Character.isWhitespace(s.charAt(i))) {
             i--;
         }
-        return s.substring(0,i+1);
+        return s.substring(0, i + 1);
     }
 
+    //clean spaces from start
+    private String ltrim(String s) {
+        int i = 0;
+        while (i < s.length() && Character.isWhitespace(s.charAt(i))) {
+            i++;
+        }
+        return s.substring(i);
+    }
+
+    //delete temporary saved file
+    private boolean deleteDirectory(File dir) {
+        if (dir.isDirectory()) {
+            File[] children = dir.listFiles();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDirectory(children[i]);
+                if (!success) {
+                    return false;
+                }
+            }
+        }
+
+        // either file or an empty directory
+        return dir.delete();
+    }
 
 }
