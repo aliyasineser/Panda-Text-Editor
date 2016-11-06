@@ -13,11 +13,20 @@ import javafx.stage.Stage;
  */
 public class TextEditor extends Application {
 
-    public static String passwordOfTheUser;
+    public static String passwordOfTheUser = "0000" ;//logFiledan okunacak sifre
+    //
+    public static String receivedPassword = null; //askpassword ile aldigi o anlik sifre
+    //dogruluk kontrolleri fonksiyonlar icinde yapiliyor
+    //askpasswordden return ediliyor
 
     public static String getPasswordOfTheUser() {
         return passwordOfTheUser;
     }
+
+    public static String getReceivedPassword() {
+        return receivedPassword;
+    }
+    
 
     @Override
     public void start(Stage primaryStage) throws Exception {

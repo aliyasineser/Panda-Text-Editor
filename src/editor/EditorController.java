@@ -58,12 +58,21 @@ public class EditorController implements Initializable {
     }
 
     public static String askPassword() {
-        // girilen passwordu return et
-        // cancel edilince null return et
-
-        return "pas";
+        try {
+            Stage passWindow = new Stage();
+            passWindow.initModality(Modality.APPLICATION_MODAL);
+            passWindow.setTitle("password");
+            Parent passLayout = FXMLLoader.load(new URL("file:src/editor/PasswordDesign.fxml"));
+            Scene thisScene = new Scene(passLayout);
+            passWindow.setScene(thisScene);
+            passWindow.showAndWait();
+        } catch (Exception ex ) {
+            
+        } 
+        return TextEditor.getReceivedPassword();//simdilik yolladim 
     }
-
+    
+  
     public void newTextFile() {
         if (isTextChanged() && askSaveChanges()) {
             saveTextFile();
@@ -106,13 +115,16 @@ public class EditorController implements Initializable {
 
                 byte[] encryptedBytes = Files.readAllBytes(path);
                 String password = askPassword();
+                System.out.println(password);
                 if (password == null) {
                     return;
                 }
+               
                 byte[] decryptedBytes = Cryption.decryptFile(encryptedBytes, password);
-
+                
                 while (decryptedBytes == null && password != null) {
                     // sifre yanlis tekrar sor
+                   // System.out.println("tekrar sifre al");
                     password = askPassword();
                     decryptedBytes = Cryption.decryptFile(encryptedBytes, password);
                 }
@@ -187,7 +199,6 @@ public class EditorController implements Initializable {
                 errorWindow.showAndWait();
             }
         }
-        //System.out.print( stringBuffer.toString());
         return stringBuffer.toString();
     }
 
