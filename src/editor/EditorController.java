@@ -12,6 +12,9 @@ import java.net.URL;
 import java.nio.file.Paths;
 import java.util.Enumeration;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.print.PrinterJob;
@@ -20,6 +23,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextAreaBuilder;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.web.HTMLEditor;
 import javafx.stage.FileChooser;
@@ -61,7 +65,12 @@ public class EditorController implements Initializable {
 
         htmlEditor.setPrefHeight(400);
         borderPane.setCenter(htmlEditor);
-        lastText = htmlEditor.getHtmlText();
+        htmlEditor.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                lastText = stripHTMLTags(htmlEditor.getHtmlText());
+            }
+        });        
     }
 
     public static String askPassword() throws Exception {
@@ -86,6 +95,7 @@ public class EditorController implements Initializable {
     }
 
     private boolean isTextChanged() {
+        System.out.println(":::" + !(htmlEditor.getHtmlText().equals(lastText)));
         return !(htmlEditor.getHtmlText().equals(lastText));
     }
 
@@ -333,7 +343,7 @@ public class EditorController implements Initializable {
         fileChooser.getExtensionFilters().add(pteFilter);
 
     }
-
+    
     /**
      * Prints the text
      */
@@ -345,5 +355,17 @@ public class EditorController implements Initializable {
             job.endJob();
         }
     }
+    
+    private String stripHTMLTags(String htmlText) {
 
+        Pattern pattern = Pattern.compile("<[^>]*>");
+        Matcher matcher = pattern.matcher(htmlText);
+        final StringBuffer sb = new StringBuffer(htmlText.length());
+        while(matcher.find()) {
+            matcher.appendReplacement(sb, " ");
+        }
+        matcher.appendTail(sb);
+        return (sb.toString().trim());
+
+    }
 }
