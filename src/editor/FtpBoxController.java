@@ -53,16 +53,15 @@ public class FtpBoxController implements Initializable {
 
     public void cancel() throws Exception{
 
-        Stage secondWindow = new Stage();
-        secondWindow.initModality(Modality.APPLICATION_MODAL);
-        secondWindow.setTitle("Error");
+        Stage errorWindow = new Stage();
+        errorWindow.initModality(Modality.APPLICATION_MODAL);
+        errorWindow.setTitle("Error");
 
-        Parent errorLayout = FXMLLoader.load(getClass().getResource("ErrorBox.fxml"), new MyResources("Hata", "Get cucked!"));
+        Parent errorLayout = FXMLLoader.load(new URL("file:src/editor/ErrorBox.fxml"), new MyResources("Hata", "Get cucked!"));
 
-        
         Scene scene = new Scene(errorLayout);
-        secondWindow.setScene(scene);
-        secondWindow.showAndWait();
+        errorWindow.setScene(scene);
+        errorWindow.showAndWait();
         
         
         

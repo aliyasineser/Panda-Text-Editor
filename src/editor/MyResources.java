@@ -28,6 +28,10 @@ public class MyResources extends ResourceBundle {
         this.htmlText = htmlText;
     }
 
+    public MyResources() {
+        this("", "", "");
+    }
+
     public MyResources(String message, String description) {
         this(message, description, "");
     }

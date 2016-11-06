@@ -31,197 +31,255 @@ import javafx.stage.Stage;
  * @author aliya
  */
 public class EditorController implements Initializable {
-    
+
     private Stage window;
     private Desktop desktop = Desktop.getDesktop();
     public BorderPane borderPane;
     final HTMLEditor htmlEditor = new HTMLEditor();
-    
+
     final Label labelFile = new Label();
-    
+
     final TextArea textArea = TextAreaBuilder.create()
-                .prefWidth(400)
-                .wrapText(true)
-                .build();
-    
+            .prefWidth(400)
+            .wrapText(true)
+            .build();
+
     // son girilen directory ve passwordler sayesinde ctrl+s ile hızlıca kayıt yapılabilecek
     private String lastDirectory = null;
     private String lastPassword = null;
     private String lastText;
-    
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
         htmlEditor.setPrefHeight(400);
         borderPane.setCenter(htmlEditor);
-
         lastText = htmlEditor.getHtmlText();
     }
 
-    public static String askPassword(){
+    public static String askPassword() {
         // girilen passwordu return et
         // cancel edilince null return et
-        
+
         return "pas";
     }
-    
+
     public void newTextFile() {
-        if(isTextChanged() && askSaveChanges())
+        if (isTextChanged() && askSaveChanges()) {
             saveTextFile();
-        
+        }
+
         htmlEditor.setHtmlText("");
         lastText = "";
         lastDirectory = null;
     }
-    
-    private boolean isTextChanged(){
+
+    private boolean isTextChanged() {
         return !(htmlEditor.getHtmlText().equals(lastText));
     }
-    
+
     // You did not save your last changes. Do you want to save them?
-    public boolean askSaveChanges(){
+    public boolean askSaveChanges() {
         // return true for yes
         // return false for no
-        
+
         return false;
     }
-    
-    public void openTextFile() {
-        if(isTextChanged() && askSaveChanges())
+
+    public void openTextFile() throws Exception {
+        if (isTextChanged() && askSaveChanges()) {
             saveTextFile();
-        
+        }
+
         FileChooser fileChooser = new FileChooser();
         configureFileChooserOpen(fileChooser);
         File file = fileChooser.showOpenDialog(window);
-        
-        if(file == null)
+
+        if (file == null) {
             return; // path secimi iptal edildi
-        
+        }
         labelFile.setText(file.getPath());
-        
-        try{
-            if(file.getName().endsWith(".ptf")){
+
+        try {
+            if (file.getName().endsWith(".ptf")) {
                 Path path = Paths.get(file.getPath());
-                
+
                 byte[] encryptedBytes = Files.readAllBytes(path);
                 String password = askPassword();
-                if(password == null)
+                if (password == null) {
                     return;
+                }
                 byte[] decryptedBytes = Cryption.decryptFile(encryptedBytes, password);
-                        
-                        
-                while(decryptedBytes == null && password != null){
+
+                while (decryptedBytes == null && password != null) {
                     // sifre yanlis tekrar sor
                     password = askPassword();
                     decryptedBytes = Cryption.decryptFile(encryptedBytes, password);
                 }
-                
-                String txt = (String)(ByteArrayConverter.convertFromByteArray(decryptedBytes));
+
+                String txt = (String) (ByteArrayConverter.convertFromByteArray(decryptedBytes));
                 htmlEditor.setHtmlText(txt);
                 lastDirectory = file.getPath();
-            }
-            else{
+            } else {
                 htmlEditor.setHtmlText(readFile(file));
                 lastDirectory = null;
             }
-            
+
             lastText = htmlEditor.getHtmlText();
+        } catch (Exception ex) {
+            Stage errorWindow = new Stage();
+            errorWindow.initModality(Modality.APPLICATION_MODAL);
+            errorWindow.setTitle("Error");
+
+            Parent errorLayout = FXMLLoader.load(new URL("file:src/editor/ErrorBox.fxml"), new MyResources("Error", "File couldn't opened."));
+
+            Scene scene = new Scene(errorLayout);
+            errorWindow.setScene(scene);
+            errorWindow.showAndWait();
         }
-        catch(Exception ex){
-            //Dosyayı acamadı hata ver
-        } 
     }
-    
-    public static String readFile(File file){
+
+    public static String readFile(File file) throws Exception {
         StringBuilder stringBuffer = new StringBuilder();
         BufferedReader bufferedReader = null;
-         
+
         try {
             bufferedReader = new BufferedReader(new FileReader(file));
-             
+
             String text;
             while ((text = bufferedReader.readLine()) != null) {
                 stringBuffer.append(text);
                 stringBuffer.append("\n");
             }
- 
+
         } catch (FileNotFoundException ex) {
-            // dosya bulamadı
+            Stage errorWindow = new Stage();
+            errorWindow.initModality(Modality.APPLICATION_MODAL);
+            errorWindow.setTitle("Error");
+
+            Parent errorLayout = FXMLLoader.load(new URL("file:src/editor/ErrorBox.fxml"), new MyResources("Error", "File couldn't found."));
+
+            Scene scene = new Scene(errorLayout);
+            errorWindow.setScene(scene);
+            errorWindow.showAndWait();
         } catch (IOException ex) {
-            // dosyayı acamadı
+            Stage errorWindow = new Stage();
+            errorWindow.initModality(Modality.APPLICATION_MODAL);
+            errorWindow.setTitle("Error");
+
+            Parent errorLayout = FXMLLoader.load(new URL("file:src/editor/ErrorBox.fxml"), new MyResources("Error", "File couldn't opened."));
+
+            Scene scene = new Scene(errorLayout);
+            errorWindow.setScene(scene);
+            errorWindow.showAndWait();
         } finally {
             try {
                 bufferedReader.close();
             } catch (IOException ex) {
-                // dosyada hata var
+                Stage errorWindow = new Stage();
+                errorWindow.initModality(Modality.APPLICATION_MODAL);
+                errorWindow.setTitle("Error");
+
+                Parent errorLayout = FXMLLoader.load(new URL("file:src/editor/ErrorBox.fxml"), new MyResources("Error", "File is corrupted."));
+
+                Scene scene = new Scene(errorLayout);
+                errorWindow.setScene(scene);
+                errorWindow.showAndWait();
             }
-        } 
-         //System.out.print( stringBuffer.toString());
+        }
+        //System.out.print( stringBuffer.toString());
         return stringBuffer.toString();
     }
-    
+
     public void saveTextFile() {
 
         FileChooser fileChooser = new FileChooser();
         configureFileChooserSave(fileChooser);
         File file = fileChooser.showSaveDialog(window);
-        
-        if(file == null)
+
+        if (file == null) {
             return; // path secimi iptal edildi
-        
+        }
         String directory = file.toString();
-        
-        if(file.getName().lastIndexOf('.') != -1)
+
+        if (file.getName().lastIndexOf('.') != -1) {
             directory = directory.substring(0, directory.lastIndexOf('.'));
-            
-        
-        saveTextFile(directory + ".ptf");
+        }
+
+        try {
+            saveTextFile(directory + ".ptf");
+
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
     }
-    
-    public void saveTextFile(String directory) {
+
+    public void saveTextFile(String directory) throws Exception {
         File file = new File(directory);
-        
+
         String password = askPassword();
-        if(DirSave.save(file, htmlEditor.getHtmlText(), password)){
+        if (DirSave.save(file, htmlEditor.getHtmlText(), password)) {
             lastDirectory = file.getPath();
             lastPassword = password;
             lastText = htmlEditor.getHtmlText();
+        } else {
+            Stage errorWindow = new Stage();
+            errorWindow.initModality(Modality.APPLICATION_MODAL);
+            errorWindow.setTitle("Error");
+
+            Parent errorLayout = FXMLLoader.load(getClass().getResource("ErrorBox.fxml"), new MyResources("Error", "File couldn't save."));
+
+            Scene scene = new Scene(errorLayout);
+            errorWindow.setScene(scene);
+            errorWindow.showAndWait();
         }
-        else{
-            // dosyayı kaydedemedi hata ver
-        }
-    }
-    
-    
-    
-    // bu fonksiyon ctrl+S icin
-    public void quickSaveTextFile(){
-        if(lastDirectory == null)
-            saveTextFile();
-        else if(lastPassword == null)
-            saveTextFile(lastDirectory);
-        else if(!DirSave.save(new File(lastDirectory), htmlEditor.getHtmlText(),lastPassword)){
-            //password yanlıs
-        }
-        else
-            lastText = htmlEditor.getHtmlText();
     }
 
+    // bu fonksiyon ctrl+S icin
+    public void quickSaveTextFile() throws Exception {
+        if (lastDirectory == null) {
+            saveTextFile();
+        } else if (lastPassword == null) {
+            saveTextFile(lastDirectory);
+        } else if (!DirSave.save(new File(lastDirectory), htmlEditor.getHtmlText(), lastPassword)) {
+            Stage errorWindow = new Stage();
+            errorWindow.initModality(Modality.APPLICATION_MODAL);
+            errorWindow.setTitle("Error");
+
+            Parent errorLayout = FXMLLoader.load(new URL("file:src/editor/ErrorBox.fxml"), new MyResources("Error", "Wrong Password."));
+
+            Scene scene = new Scene(errorLayout);
+            errorWindow.setScene(scene);
+            errorWindow.showAndWait();
+        } else {
+            lastText = htmlEditor.getHtmlText();
+        }
+    }
+
+    /**
+     * Calls FTP Save Box and saves text to given address
+     *
+     * @throws Exception
+     */
     public void saveToFTP() throws Exception {
 
         Stage secondWindow = new Stage();
         secondWindow.initModality(Modality.APPLICATION_MODAL);
         secondWindow.setTitle("FTP Information");
 
-        Parent ftpSaveLayout = FXMLLoader.load(getClass().getResource("FtpBoxDesign.fxml"));
+        Parent ftpSaveLayout = FXMLLoader.load(getClass().getResource("FtpBoxDesign.fxml"), new MyResources("", "", htmlEditor.getHtmlText()));
 
-        
         Scene scene = new Scene(ftpSaveLayout);
         secondWindow.setScene(scene);
         secondWindow.showAndWait();
 
     }
 
+    /**
+     * Sets the file chooser for open
+     *
+     * @param fileChooser
+     */
     private static void configureFileChooserOpen(final FileChooser fileChooser) {
         fileChooser.setTitle("Open file");
         fileChooser.setInitialDirectory(
@@ -237,13 +295,22 @@ public class EditorController implements Initializable {
 
     }
 
+    /**
+     * closes program
+     */
     public void closeProgram() {
-        if(isTextChanged() && askSaveChanges())
+        if (isTextChanged() && askSaveChanges()) {
             saveTextFile();
-        
+        }
+
         ((Stage) (borderPane.getScene().getWindow())).close();
     }
 
+    /**
+     * Sets the file chooser for save
+     *
+     * @param fileChooser
+     */
     private static void configureFileChooserSave(final FileChooser fileChooser) {
         fileChooser.setTitle("Save file");
         fileChooser.setInitialDirectory(
@@ -254,6 +321,9 @@ public class EditorController implements Initializable {
 
     }
 
+    /**
+     * Prints the text
+     */
     public void printText() {
         PrinterJob job = PrinterJob.createPrinterJob();
         if (job != null) {

@@ -12,6 +12,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -20,12 +22,12 @@ import javafx.scene.image.ImageView;
  */
 public class ErrorBoxController implements Initializable {
 
+    public GridPane gridWindow;
     public ImageView errImage;
     public Label messageLabel;
     public Label detailsLabel;
     public Button okButton;
 
-    
     /**
      * Initializes the controller class.
      */
@@ -34,6 +36,11 @@ public class ErrorBoxController implements Initializable {
         errImage.setImage(new Image("file:src/Assets/errorPanda_200x200.png"));
         messageLabel.setText(rb.getString("message"));
         detailsLabel.setText(rb.getString("description"));
-    }    
-    
+    }
+
+    public void closeWindow() {
+
+        ((Stage) (gridWindow.getScene().getWindow())).close();
+    }
+
 }
