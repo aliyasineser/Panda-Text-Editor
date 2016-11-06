@@ -36,6 +36,13 @@ public class EditorController implements Initializable {
     private Desktop desktop = Desktop.getDesktop();
     public BorderPane borderPane;
     final HTMLEditor htmlEditor = new HTMLEditor();
+    public static String receivedPassword = null; //askpassword ile aldigi o anlik sifre
+    //dogruluk kontrolleri fonksiyonlar icinde yapiliyor
+    //askpasswordden return ediliyor
+
+    public static String getReceivedPassword() {
+        return receivedPassword;
+    }
 
     final Label labelFile = new Label();
 
@@ -57,22 +64,17 @@ public class EditorController implements Initializable {
         lastText = htmlEditor.getHtmlText();
     }
 
-    public static String askPassword() {
-        try {
-            Stage passWindow = new Stage();
-            passWindow.initModality(Modality.APPLICATION_MODAL);
-            passWindow.setTitle("password");
-            Parent passLayout = FXMLLoader.load(new URL("file:src/editor/PasswordDesign.fxml"));
-            Scene thisScene = new Scene(passLayout);
-            passWindow.setScene(thisScene);
-            passWindow.showAndWait();
-        } catch (Exception ex ) {
-            
-        } 
-        return TextEditor.getReceivedPassword();//simdilik yolladim 
+    public static String askPassword() throws Exception {
+        Stage passWindow = new Stage();
+        passWindow.initModality(Modality.APPLICATION_MODAL);
+        passWindow.setTitle("password");
+        Parent passLayout = FXMLLoader.load(new URL("file:src/editor/PasswordDesign.fxml"));
+        Scene thisScene = new Scene(passLayout);
+        passWindow.setScene(thisScene);
+        passWindow.showAndWait();
+        return getReceivedPassword();
     }
-    
-  
+
     public void newTextFile() {
         if (isTextChanged() && askSaveChanges()) {
             saveTextFile();
@@ -119,12 +121,12 @@ public class EditorController implements Initializable {
                 if (password == null) {
                     return;
                 }
-               
+
                 byte[] decryptedBytes = Cryption.decryptFile(encryptedBytes, password);
-                
+
                 while (decryptedBytes == null && password != null) {
                     // sifre yanlis tekrar sor
-                   // System.out.println("tekrar sifre al");
+                    // System.out.println("tekrar sifre al");
                     password = askPassword();
                     decryptedBytes = Cryption.decryptFile(encryptedBytes, password);
                 }
