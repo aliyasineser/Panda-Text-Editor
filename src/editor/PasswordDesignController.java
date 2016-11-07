@@ -33,7 +33,6 @@ public class PasswordDesignController implements Initializable {
     public Button enterButton;
     public PasswordField passText;
     public ImageView Image;
-    
 
     /**
      * Initializes the controller class.
@@ -41,7 +40,7 @@ public class PasswordDesignController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-       Image.setImage(new Image("file:src/Assets/64x64_panda_icon.png"));
+        Image.setImage(new Image("file:src/Assets/64x64_panda_icon.png"));
     }
 
     public void enter() throws IOException {
@@ -49,7 +48,7 @@ public class PasswordDesignController implements Initializable {
         // TextEditor.passwordOfTheUser = passText.getText();
         if (TextEditor.getPasswordOfTheUser().equals(passText.getText())) {
             //TextEditor.receivedPassword = passText.getText();
-            EditorController.receivedPassword=passText.getText();
+            EditorController.receivedPassword = passText.getText();
             ((Stage) (passScene.getScene().getWindow())).close();
         } else {
             System.err.println(TextEditor.getPasswordOfTheUser() + "  " + passText.getText());
@@ -62,14 +61,14 @@ public class PasswordDesignController implements Initializable {
             errorWindow.setScene(scene);
             errorWindow.showAndWait();
             EditorController.receivedPassword = passText.getText();
-            ((Stage) (passScene.getScene().getWindow())).close();
+//                ((Stage) (passScene.getScene().getWindow())).close();
         }
-        // ((Stage) (passScene.getScene().getWindow())).close();
 
+        // ((Stage) (passScene.getScene().getWindow())).close();
     }
 
     public void cancel() {
-        
+
         ((Stage) (passScene.getScene().getWindow())).close();
     }
 
