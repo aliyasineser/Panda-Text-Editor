@@ -41,6 +41,7 @@ public class EditorController implements Initializable {
     public BorderPane borderPane;
     final HTMLEditor htmlEditor = new HTMLEditor();
     public static String receivedPassword = null; //askpassword ile aldigi o anlik sifre
+    public static boolean sign = false;
     //dogruluk kontrolleri fonksiyonlar icinde yapiliyor
     //askpasswordden return ediliyor
 
@@ -70,7 +71,7 @@ public class EditorController implements Initializable {
             public void handle(KeyEvent event) {
                 lastText = stripHTMLTags(htmlEditor.getHtmlText());
             }
-        });        
+        });
     }
     /**
      * This method create an menu and getting password to encrypt file.
@@ -99,6 +100,7 @@ public class EditorController implements Initializable {
     }
     
     private boolean isTextChanged() {
+        ///System.out.println(":::" + !(htmlEditor.getHtmlText().equals(lastText)));
         return !(htmlEditor.getHtmlText().equals(lastText));
     }
 
@@ -134,7 +136,7 @@ public class EditorController implements Initializable {
 
                 byte[] encryptedBytes = Files.readAllBytes(path);
                 String password = askPassword();
-                System.out.println(password);
+                //System.out.println(password);
                 if (password == null) {
                     return;
                 }
@@ -143,7 +145,10 @@ public class EditorController implements Initializable {
 
                 while (decryptedBytes == null && password != null) {
                     // sifre yanlis tekrar sor
-                    // System.out.println("tekrar sifre al");
+                    if (sign) {//eger arayuzde cancel'a basilirsa
+                        //dosyayi acmadan open islemini durdurur
+                        return;
+                    }
                     password = askPassword();
                     decryptedBytes = Cryption.decryptFile(encryptedBytes, password);
                 }
@@ -350,27 +355,27 @@ public class EditorController implements Initializable {
         fileChooser.getExtensionFilters().add(pteFilter);
 
     }
-    
+
     /**
      * Prints the text
      */
     public void printText() {
-        
+
         PrinterJob job = PrinterJob.createPrinterJob();
         if (job != null) {
-            if(job.showPrintDialog(null)) {
+            if (job.showPrintDialog(null)) {
                 htmlEditor.print(job);
                 job.endJob();
             }
         }
     }
-    
+
     private String stripHTMLTags(String htmlText) {
 
         Pattern pattern = Pattern.compile("<[^>]*>");
         Matcher matcher = pattern.matcher(htmlText);
         final StringBuffer sb = new StringBuffer(htmlText.length());
-        while(matcher.find()) {
+        while (matcher.find()) {
             matcher.appendReplacement(sb, " ");
         }
         matcher.appendTail(sb);
