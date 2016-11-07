@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="513.0" prefWidth="532.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Region prefHeight="86.0" prefWidth="532.0" />
+      <Label text="Panda Text Editor">
+         <font>
+            <Font name="Yu Gothic UI Regular" size="27.0" />
+         </font>
+      </Label>
+      <Region prefHeight="60.0" prefWidth="532.0" />
+      <ImageView fx:id="pandaEditorIcon" fitHeight="150.0" fitWidth="200.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../Assets/256x256_panda_icon.png" />
+         </image>
+      </ImageView>
+      <HBox alignment="CENTER" prefHeight="120.0" prefWidth="532.0">
+         <children>
+            <Label fx:id="userPasswordLabel" text="Password: " />
+            <Region prefHeight="100.0" prefWidth="9.0" />
+            <PasswordField fx:id="userPasswordText" prefHeight="31.0" prefWidth="221.0" />
+         </children>
+      </HBox>
+      <Button mnemonicParsing="false" text="Log in">
+         <tooltip>
+            <Tooltip text="hey" />
+         </tooltip>
+      </Button>
+      <Region prefHeight="134.0" prefWidth="532.0" />
+   </children>
+</VBox>
