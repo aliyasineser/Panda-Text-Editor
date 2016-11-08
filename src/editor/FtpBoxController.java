@@ -7,11 +7,15 @@ package editor;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
@@ -46,8 +50,20 @@ public class FtpBoxController implements Initializable {
         ((Stage) (ftpScene.getScene().getWindow())).close();
     }
 
-    public void cancel() {
+    public void cancel() throws Exception{
 
+        Stage errorWindow = new Stage();
+        errorWindow.initModality(Modality.APPLICATION_MODAL);
+        errorWindow.setTitle("Error");
+
+        Parent errorLayout = FXMLLoader.load(new URL("file:src/editor/ErrorBox.fxml"), new MyResources("Hata", "Get cucked!"));
+
+        Scene scene = new Scene(errorLayout);
+        errorWindow.setScene(scene);
+        errorWindow.showAndWait();
+        
+        
+        
         ((Stage) (ftpScene.getScene().getWindow())).close();
     }
 

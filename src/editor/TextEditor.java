@@ -13,11 +13,14 @@ import javafx.stage.Stage;
  */
 public class TextEditor extends Application {
 
-    public static String passwordOfTheUser;
-
-    public String getPasswordOfTheUser() {
+    public static String passwordOfTheUser = "0000" ;//logFiledan okunacak sifre
+    //
+    
+    public static String getPasswordOfTheUser() {
         return passwordOfTheUser;
     }
+
+    
 
     @Override
     public void start(Stage primaryStage) throws Exception {

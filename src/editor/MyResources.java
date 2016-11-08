@@ -20,10 +20,32 @@ public class MyResources extends ResourceBundle {
 
     private String message;
     private String description;
+    private String htmlText;
 
-    public MyResources(String message, String Description) {
+    public MyResources(String message, String description, String htmlText) {
         this.message = message;
-        this.description = Description;
+        this.description = description;
+        this.htmlText = htmlText;
+    }
+
+    public MyResources() {
+        this("", "", "");
+    }
+
+    public MyResources(String message, String description) {
+        this(message, description, "");
+    }
+
+    public MyResources(String message) {
+        this(message, "", "");
+    }
+
+    public String getHtmlText() {
+        return htmlText;
+    }
+
+    public void setHtmlText(String htmlText) {
+        this.htmlText = htmlText;
     }
 
     public String getMessage() {
@@ -52,6 +74,9 @@ public class MyResources extends ResourceBundle {
         if (key.equals("description")) {
             return description;
         }
+        if (key.equals("text")) {
+            return htmlText;
+        }
 
         return null;
     }
@@ -63,6 +88,6 @@ public class MyResources extends ResourceBundle {
     // Overrides handleKeySet() so that the getKeys() implementation
     // can rely on the keySet() value.
     protected Set<String> handleKeySet() {
-        return new HashSet<String>(Arrays.asList("okKey", "message", "description"));
+        return new HashSet<String>(Arrays.asList("okKey", "message", "description", "text"));
     }
 }
