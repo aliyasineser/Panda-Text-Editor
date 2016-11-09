@@ -69,13 +69,10 @@ public class PasswordDesignController implements Initializable {
     
 
     public void cancel() {
-<<<<<<< HEAD
-
-=======
         EditorController.sign = true;
         //eger arayuzden editorController class,na bir sey return edebilirsek 
         //bu sign silinecek
->>>>>>> origin/master
+
         ((Stage) (passScene.getScene().getWindow())).close();
     }
 
