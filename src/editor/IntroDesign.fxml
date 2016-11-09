@@ -9,8 +9,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="513.0" prefWidth="532.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="IntroScene" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="513.0" prefWidth="532.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="editor.PasswordDesignController">
    <children>
       <Region prefHeight="86.0" prefWidth="532.0" />
       <Label text="Panda Text Editor">
@@ -31,9 +30,9 @@
             <PasswordField fx:id="userPasswordText" prefHeight="31.0" prefWidth="221.0" />
          </children>
       </HBox>
-      <Button mnemonicParsing="false" text="Log in">
+      <Button fx:id="loginButton" mnemonicParsing="false" text="Log in">
          <tooltip>
-            <Tooltip text="hey" />
+            <Tooltip text="This is special password for pc user. If you are using the program for the first time, type the password you want. If you typed the password at least one time, then you have to type the password." />
          </tooltip>
       </Button>
       <Region prefHeight="134.0" prefWidth="532.0" />
