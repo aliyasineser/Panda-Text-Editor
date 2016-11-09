@@ -41,6 +41,7 @@ public class EditorController implements Initializable {
     public BorderPane borderPane;
     final HTMLEditor htmlEditor = new HTMLEditor();
     public static String receivedPassword = null; //askpassword ile aldigi o anlik sifre
+    public static boolean sign = false;
     //dogruluk kontrolleri fonksiyonlar icinde yapiliyor
     //askpasswordden return ediliyor
 
@@ -59,7 +60,7 @@ public class EditorController implements Initializable {
     private String lastDirectory = null;
     private String lastPassword = null;
     private String lastText;
-
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
@@ -70,9 +71,13 @@ public class EditorController implements Initializable {
             public void handle(KeyEvent event) {
                 lastText = stripHTMLTags(htmlEditor.getHtmlText());
             }
-        });        
+        });
     }
-
+    /**
+     * This method create an menu and getting password to encrypt file.
+     * @return password which is received from user.
+     * @throws Exception FXML loader can throw exception.
+     */
     public static String askPassword() throws Exception {
         Stage passWindow = new Stage();
         passWindow.initModality(Modality.APPLICATION_MODAL);
@@ -93,14 +98,18 @@ public class EditorController implements Initializable {
         lastText = "";
         lastDirectory = null;
     }
-
+    
     private boolean isTextChanged() {
-        System.out.println(":::" + !(htmlEditor.getHtmlText().equals(lastText)));
+        ///System.out.println(":::" + !(htmlEditor.getHtmlText().equals(lastText)));
         return !(htmlEditor.getHtmlText().equals(lastText));
     }
 
-    // You did not save your last changes. Do you want to save them?
+    /**
+     * TODO
+     * @return 
+     */
     public boolean askSaveChanges() {
+        TODO:
         // return true for yes
         // return false for no
 
@@ -127,7 +136,7 @@ public class EditorController implements Initializable {
 
                 byte[] encryptedBytes = Files.readAllBytes(path);
                 String password = askPassword();
-                System.out.println(password);
+                //System.out.println(password);
                 if (password == null) {
                     return;
                 }
@@ -136,7 +145,10 @@ public class EditorController implements Initializable {
 
                 while (decryptedBytes == null && password != null) {
                     // sifre yanlis tekrar sor
-                    // System.out.println("tekrar sifre al");
+                    if (sign) {//eger arayuzde cancel'a basilirsa
+                        //dosyayi acmadan open islemini durdurur
+                        return;
+                    }
                     password = askPassword();
                     decryptedBytes = Cryption.decryptFile(encryptedBytes, password);
                 }
@@ -299,9 +311,9 @@ public class EditorController implements Initializable {
     }
 
     /**
-     * Sets the file chooser for open
-     *
-     * @param fileChooser
+     * This method configure file chooser menu.User can choose txt files,ptf files,
+     * and all files
+     * @param fileChooser fileChooser object.
      */
     private static void configureFileChooserOpen(final FileChooser fileChooser) {
         fileChooser.setTitle("Open file");
@@ -319,7 +331,7 @@ public class EditorController implements Initializable {
     }
 
     /**
-     * closes program
+     * Exiting from Program.
      */
     public void closeProgram() {
         if (isTextChanged() && askSaveChanges()) {
@@ -330,9 +342,9 @@ public class EditorController implements Initializable {
     }
 
     /**
-     * Sets the file chooser for save
-     *
-     * @param fileChooser
+     * This method configure file chooser menu.User want to save file to anywhere
+     * This method choose directory which will save there.
+     * @param fileChooser 
      */
     private static void configureFileChooserSave(final FileChooser fileChooser) {
         fileChooser.setTitle("Save file");
@@ -343,27 +355,27 @@ public class EditorController implements Initializable {
         fileChooser.getExtensionFilters().add(pteFilter);
 
     }
-    
+
     /**
      * Prints the text
      */
     public void printText() {
-        
+
         PrinterJob job = PrinterJob.createPrinterJob();
         if (job != null) {
-            if(job.showPrintDialog(null)) {
+            if (job.showPrintDialog(null)) {
                 htmlEditor.print(job);
                 job.endJob();
             }
         }
     }
-    
+
     private String stripHTMLTags(String htmlText) {
 
         Pattern pattern = Pattern.compile("<[^>]*>");
         Matcher matcher = pattern.matcher(htmlText);
         final StringBuffer sb = new StringBuffer(htmlText.length());
-        while(matcher.find()) {
+        while (matcher.find()) {
             matcher.appendReplacement(sb, " ");
         }
         matcher.appendTail(sb);
