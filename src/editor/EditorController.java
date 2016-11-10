@@ -72,6 +72,7 @@ public class EditorController implements Initializable {
                 lastText = stripHTMLTags(htmlEditor.getHtmlText());
             }
         });
+        
     }
 
     /**
@@ -84,8 +85,14 @@ public class EditorController implements Initializable {
         Stage passWindow = new Stage();
         passWindow.initModality(Modality.APPLICATION_MODAL);
         passWindow.setTitle("password");
+       
         Parent passLayout = FXMLLoader.load(new URL("file:src/editor/PasswordDesign.fxml"));
+        
         Scene thisScene = new Scene(passLayout);
+        passWindow.setOnCloseRequest(event -> {
+           sign = true;
+                    
+        });
         passWindow.setScene(thisScene);
         passWindow.showAndWait();
         return getReceivedPassword();
@@ -157,7 +164,7 @@ public class EditorController implements Initializable {
 
                 while (decryptedBytes == null && password != null) {
                     // sifre yanlis tekrar sor
-                    if (sign) {//eger arayuzde cancel'a basilirsa
+                    if (sign) {//eger arayuzde cancel'a basilirsa !!
                         //dosyayi acmadan open islemini durdurur
                         return;
                     }
