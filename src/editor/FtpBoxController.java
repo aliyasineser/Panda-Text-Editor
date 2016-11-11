@@ -46,23 +46,22 @@ public class FtpBoxController implements Initializable {
 
     public void save() {
         FtpSave saveFile;
-//        saveFile.uploadToFTP(, , , , );
         System.err.println(passText.getText() + "\n" + filePassText.getText());
         ((Stage) (ftpScene.getScene().getWindow())).close();
     }
 
     public void cancel() throws Exception{
 
-        Stage errorWindow = new Stage();
-        errorWindow.initModality(Modality.APPLICATION_MODAL);
-        errorWindow.setTitle("Error");
-
-        Parent errorLayout = FXMLLoader.load(new URL("file:src/editor/ErrorBox.fxml"), new MyResources("Hata", "Get cucked!"));
-
-        Scene scene = new Scene(errorLayout);
-        errorWindow.setScene(scene);
-        errorWindow.showAndWait();
-        
+//        Stage errorWindow = new Stage();
+//        errorWindow.initModality(Modality.APPLICATION_MODAL);
+//        errorWindow.setTitle("Error");
+//
+//        Parent errorLayout = FXMLLoader.load(new URL("file:src/editor/ErrorBox.fxml"), new MyResources("Hata", "Get cucked!"));
+//
+//        Scene scene = new Scene(errorLayout);
+//        errorWindow.setScene(scene);
+//        errorWindow.showAndWait();
+//        
         
         
         ((Stage) (ftpScene.getScene().getWindow())).close();

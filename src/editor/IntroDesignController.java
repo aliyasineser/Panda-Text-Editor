@@ -8,6 +8,9 @@ package editor;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
+import javafx.scene.layout.VBox;
 
 /**
  * FXML Controller class
@@ -16,12 +19,22 @@ import javafx.fxml.Initializable;
  */
 public class IntroDesignController implements Initializable {
 
+    public VBox introScene;
+    public PasswordField userPasswordText;
+    public Button loginButton;
+    
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        
     }    
+    
+    
+    
+    
+    
+    
     
 }
