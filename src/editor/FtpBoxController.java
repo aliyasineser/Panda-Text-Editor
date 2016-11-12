@@ -36,6 +36,7 @@ public class FtpBoxController implements Initializable {
     public PasswordField passText = new PasswordField();       //user password
     public TextField fileNameText = new TextField();   //new file name
     public PasswordField filePassText = new PasswordField(); //file password
+    String textsInEditor;
 
     /**
      * Initializes the controller class.
@@ -43,18 +44,22 @@ public class FtpBoxController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-
+        textsInEditor = (String) rb.getString("text");
     }
 
-
+    /**
+     * user interface for ftp upload
+     * @throws InterruptedException
+     * @throws MalformedURLException
+     * @throws IOException
+     */
     public void save() throws InterruptedException, MalformedURLException, IOException {
-        FtpSave saveMe = new FtpSave();
-        //String textsInEditor = rb.handleGetObject("text");
-
-        //html editordeki text bu fonksiyona parametre gelecek
-        String uploadToFTP = saveMe.uploadToFTP(ipText.getText(), portText.getText(), idText.getText(), passText.getText(), fileNameText.getText(), "htmltext", filePassText.getText(), ".ptf");
         
-        if(!uploadToFTP.equals(FtpSave.fileUpdatedSuccessful)){
+        FtpSave saveMe = new FtpSave();
+
+        String uploadToFTP = saveMe.uploadToFTP(ipText.getText(), portText.getText(), idText.getText(), passText.getText(), fileNameText.getText(), textsInEditor, filePassText.getText(), ".ptf");
+
+        if (!uploadToFTP.equals(FtpSave.fileUpdatedSuccessful)) {
             Stage errorWindow = new Stage();
             errorWindow.initModality(Modality.APPLICATION_MODAL);
             errorWindow.setTitle("Error");
@@ -65,18 +70,16 @@ public class FtpBoxController implements Initializable {
             errorWindow.setScene(scene);
             errorWindow.showAndWait();
         }
-        
+
         ((Stage) (ftpScene.getScene().getWindow())).close();
-/*
-    public void save() {
-        FtpSave saveFile;
-        System.err.println(passText.getText() + "\n" + filePassText.getText());
-        ((Stage) (ftpScene.getScene().getWindow())).close();
+
     }
-*/
-    }
-    
-    public void cancel() throws Exception{
+
+    /**
+     * cancel the ftp upload
+     * @throws Exception 
+     */
+    public void cancel() throws Exception {
 
         ((Stage) (ftpScene.getScene().getWindow())).close();
     }

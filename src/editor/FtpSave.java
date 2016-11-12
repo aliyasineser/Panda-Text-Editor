@@ -6,7 +6,15 @@
 package editor;
 
 /**
- *
+ * This code takes IP, port, user name, user password, new file name, 
+ * file password from user and takes file record type default
+ * as ".ptf", texts in editor
+ *      Clean first & last spaces from some parameters(without passwords) 
+ *      Checks if there exist same file name with -new file name- parameter
+ *          add a number to end of file name
+ *      Upload file to ftp servers root directory
+ *      If exist error, returned and showed to user
+ *          
  * @author eda arikan
  */
 import java.io.File;
@@ -46,76 +54,121 @@ public class FtpSave {
     Integer portNumber;
     String userID;
     String userPass;
-    String path;
+  
 
     public boolean save() {
         return false;
     }
 
+    /**
+     * Default constructor
+     */
     public FtpSave() {
         this.ipAddress = "";
         this.portNumber = 0;
         this.userID = "";
         this.userPass = "";
-        this.path = "";
     }
 
+    /**
+     * constructor
+     * @param ipAddress
+     * @param portNumber
+     * @param userID
+     * @param userPass
+     * @param path 
+     */
     public FtpSave(String ipAddress, Integer portNumber, String userID, String userPass, String path) {
         this.ipAddress = ipAddress;
         this.portNumber = portNumber;
         this.userID = userID;
         this.userPass = userPass;
-        this.path = path;
     }
 
+    /**
+     * get ip address
+     * @return String
+     */
     public String getIpAddress() {
         return ipAddress;
     }
 
+    /**
+     * set ip address
+     * @param ipAddress String
+     */
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
     }
 
+    /**
+     * get port number
+     * @return Integer
+     */
     public Integer getPortNumber() {
         return portNumber;
     }
 
+    /**
+     * set port number
+     * @param portNumber Integer 
+     */
     public void setPortNumber(Integer portNumber) {
         this.portNumber = portNumber;
     }
 
+    /**
+     * get user id for login
+     * @return String
+     */
     public String getUserID() {
         return userID;
     }
 
+    /**
+     * set user id 
+     * @param userID String
+     */
     public void setUserID(String userID) {
         this.userID = userID;
     }
 
+    /**
+     * get user password
+     * @return String
+     */
     public String getUserPass() {
         return userPass;
     }
 
+    /**
+     * set user password
+     * @param userPass String
+     */
     public void setUserPass(String userPass) {
         this.userPass = userPass;
     }
 
-    public String getPath() {
-        return path;
-    }
-
-    public void setPath(String path) {
-        this.path = path;
-    }
-
+    /**
+     * Upload file with ftp connection 
+     * @param ipAddress to connect ip address
+     * @param portNumber to connect port
+     * @param userID user id for login
+     * @param userPass user password for login
+     * @param newFileName file name for upload
+     * @param htmlText get written text in editor
+     * @param filePassword file password
+     * @param recordType default as .ptf
+     * @return function is succesfull or not as a string
+     * @throws InterruptedException 
+     */
     public String uploadToFTP(String ipAddress, String portNumber, String userID,
             String userPass, String newFileName, String htmlText,
             String filePassword, String recordType) throws InterruptedException {
 
         // get an ftpClient object
         FTPClient ftpClient = new FTPClient();
-        FileInputStream inputStream = null;
-        String addedNumberToEnd = ""; //added different numbers to same file names
+        FileInputStream inputStream;
 
         //deleting spaces of end of word
         newFileName = rtrim(newFileName);
@@ -259,7 +312,11 @@ public class FtpSave {
         return returnState;
     }
 
-    //clean spaces from end of string
+    /**
+     * clean spaces from end of string
+     * @param s string
+     * @return string 
+     */
     private String rtrim(String s) {
         int i = s.length() - 1;
         while (i >= 0 && Character.isWhitespace(s.charAt(i))) {
@@ -268,7 +325,11 @@ public class FtpSave {
         return s.substring(0, i + 1);
     }
 
-    //clean spaces from start
+    /**
+     * clean spaces from start
+     * @param s string
+     * @return string
+     */
     private String ltrim(String s) {
         int i = 0;
         while (i < s.length() && Character.isWhitespace(s.charAt(i))) {
@@ -277,7 +338,11 @@ public class FtpSave {
         return s.substring(i);
     }
 
-    //delete temporary saved file
+    /**
+     * delete temporary saved file
+     * @param dir directory
+     * @return boolean
+     */
     private boolean deleteDirectory(File dir) {
         if (dir.isDirectory()) {
             File[] children = dir.listFiles();
@@ -289,7 +354,6 @@ public class FtpSave {
             }
         }
 
-        // either file or an empty directory
         return dir.delete();
     }
 
