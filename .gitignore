@@ -74,6 +74,10 @@ fabric.properties
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
 
+<<<<<<< HEAD
 nbproject/private/private.properties
 *.properties
+=======
+build/built-jar.properties
+>>>>>>> refs/remotes/origin/master
 build/built-jar.properties

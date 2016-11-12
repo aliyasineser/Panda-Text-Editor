@@ -46,6 +46,7 @@ public class FtpBoxController implements Initializable {
 
     }
 
+
     public void save() throws InterruptedException, MalformedURLException, IOException {
         FtpSave saveMe = new FtpSave();
         //String textsInEditor = rb.handleGetObject("text");
@@ -65,10 +66,16 @@ public class FtpBoxController implements Initializable {
             errorWindow.showAndWait();
         }
         
-        
+        ((Stage) (ftpScene.getScene().getWindow())).close();
+/*
+    public void save() {
+        FtpSave saveFile;
+        System.err.println(passText.getText() + "\n" + filePassText.getText());
         ((Stage) (ftpScene.getScene().getWindow())).close();
     }
-
+*/
+    }
+    
     public void cancel() throws Exception{
 
         ((Stage) (ftpScene.getScene().getWindow())).close();

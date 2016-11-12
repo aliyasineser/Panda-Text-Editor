@@ -40,30 +40,6 @@ public class MyResources extends ResourceBundle {
         this(message, "", "");
     }
 
-    public String getHtmlText() {
-        return htmlText;
-    }
-
-    public void setHtmlText(String htmlText) {
-        this.htmlText = htmlText;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String Description) {
-        this.description = Description;
-    }
-
     public Object handleGetObject(String key) {
         if (key.equals("okKey")) {
             return "Ok";

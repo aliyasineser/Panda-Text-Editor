@@ -12,6 +12,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -36,6 +38,13 @@ public class ErrorBoxController implements Initializable {
         errImage.setImage(new Image("file:src/Assets/errorPanda_200x200.png"));
         messageLabel.setText(rb.getString("message"));
         detailsLabel.setText(rb.getString("description"));
+        //enter'a basildiginda hata mesaji ekrani kapanir
+        okButton.setOnKeyPressed((KeyEvent key)->{
+            if (key.getCode() == KeyCode.ENTER) {
+                //System.err.println("firee");
+                okButton.fire();
+            }
+        });
     }
 
     public void closeWindow() {
