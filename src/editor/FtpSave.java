@@ -5,18 +5,7 @@
  */
 package editor;
 
-/**
- * This code takes IP, port, user name, user password, new file name, 
- * file password from user and takes file record type default
- * as ".ptf", texts in editor
- *      Clean first & last spaces from some parameters(without passwords) 
- *      Checks if there exist same file name with -new file name- parameter
- *          add a number to end of file name
- *      Upload file to ftp servers root directory
- *      If exist error, returned and showed to user
- *          
- * @author eda arikan
- */
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -31,10 +20,19 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPFileFilter;
 import org.apache.commons.net.ftp.FTPReply;
+/**
 
 /**
- *
- * @author aliyasineser
+ * uploadToFTP method takes IP, port, user name, user password, new file name, 
+ * file password from user and takes file record type default
+ * as ".ptf", texts in editor
+ *      Clean first & last spaces from some parameters(without passwords) 
+ *      Checks if there exist same file name with -new file name- parameter
+ *          add a number to end of file name
+ *      Upload file to ftp servers root directory
+ *      If exist error, returned and showed to user
+ *          
+ * @author eda arikan
  */
 public class FtpSave {
 
