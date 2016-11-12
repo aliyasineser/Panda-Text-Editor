@@ -50,7 +50,7 @@ public class FtpBoxController implements Initializable {
         ((Stage) (ftpScene.getScene().getWindow())).close();
     }
 
-    public void cancel() throws Exception{
+    public void cancel() throws Exception {
 
 //        Stage errorWindow = new Stage();
 //        errorWindow.initModality(Modality.APPLICATION_MODAL);
@@ -62,8 +62,6 @@ public class FtpBoxController implements Initializable {
 //        errorWindow.setScene(scene);
 //        errorWindow.showAndWait();
 //        
-        
-        
         ((Stage) (ftpScene.getScene().getWindow())).close();
     }
 
