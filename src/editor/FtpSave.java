@@ -22,6 +22,7 @@ import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPFileFilter;
+import org.apache.commons.net.ftp.FTPReply;
 
 /**
  *
@@ -34,6 +35,7 @@ public class FtpSave {
     static final String loginError = "PANDA_TEXT_EDITOR_FILE_LOGIN_ERROR";
     static final String logoutError = "PANDA_TEXT_EDITOR_FILE_LOGOUT_ERROR";
     static final String emptyValueError = "PANDA_TEXT_EDITOR_FILE_NULL_VALUE_ERROR"; //for empty parameters
+    static final String refusedConnection = "PANDA_TEXT_EDITOR_REFUSED_CONNECTION";
 
     //these variables just for temporary directory and file 
     final String createdDirName = "__DIRECTORY_SAVE___9199999";
@@ -46,7 +48,6 @@ public class FtpSave {
     String userPass;
     String path;
 
-    
     public boolean save() {
         return false;
     }
@@ -108,18 +109,18 @@ public class FtpSave {
     }
 
     public String uploadToFTP(String ipAddress, String portNumber, String userID,
-                              String userPass, String newFileName, String htmlText, 
-                              String filePassword, String recordType) {
+            String userPass, String newFileName, String htmlText,
+            String filePassword, String recordType) throws InterruptedException {
 
         // get an ftpClient object
         FTPClient ftpClient = new FTPClient();
         FileInputStream inputStream = null;
         String addedNumberToEnd = ""; //added different numbers to same file names
-       
+
         //deleting spaces of end of word
         newFileName = rtrim(newFileName);
         newFileName = ltrim(newFileName);
-        
+
         //localFileName is same with newFileName. But localFileName must be final for FTPFileFilter() function
         final String localFileName = newFileName;
 
@@ -148,11 +149,22 @@ public class FtpSave {
             // pass directory path on server to connect
             ftpClient.connect(ipAddress, stringtToIntForPortNumber);
 
+            //check reply code
+            int reply = ftpClient.getReplyCode();
+            if (!FTPReply.isPositiveCompletion(reply)) {
+                ftpClient.disconnect();
+                returnState = refusedConnection;
+            }
+
             // pass username and password, returned true if authentication is successfull
             boolean login = ftpClient.login(userID, userPass);
 
             //System.out.println("-" + userID + "-" + userPass + "-");
             if (login) {
+
+                ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+                ftpClient.enterLocalPassiveMode();
+
                 //get the path of save location
                 Path getHomePath = Paths.get(System.getProperty("user.home") + File.separatorChar + "Documents");
 
@@ -223,25 +235,24 @@ public class FtpSave {
             }
 
         } catch (NumberFormatException e) {
-            e.printStackTrace();
             return loginError;
         } catch (IllegalArgumentException e) {
-            e.printStackTrace();
+            return loginError;
         } catch (FileSystemNotFoundException e) {
-            e.printStackTrace();
+            return loginError;
         } catch (SecurityException e) {
-            e.printStackTrace();
+            return loginError;
         } catch (NullPointerException e) {
-            e.printStackTrace();
+            return loginError;
         } catch (SocketException e) {
-            e.printStackTrace();
+            return loginError;
         } catch (IOException e) {
-            e.printStackTrace();
+            return loginError;
         } finally {
             try {
                 ftpClient.disconnect();
             } catch (IOException e) {
-                e.printStackTrace();
+                //do nothing
             }
         }
 

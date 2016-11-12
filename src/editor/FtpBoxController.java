@@ -5,6 +5,8 @@
  */
 package editor;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXMLLoader;
@@ -44,26 +46,31 @@ public class FtpBoxController implements Initializable {
 
     }
 
-    public void save() {
+    public void save() throws InterruptedException, MalformedURLException, IOException {
         FtpSave saveMe = new FtpSave();
+        //String textsInEditor = rb.handleGetObject("text");
+
+        //html editordeki text bu fonksiyona parametre gelecek
         String uploadToFTP = saveMe.uploadToFTP(ipText.getText(), portText.getText(), idText.getText(), passText.getText(), fileNameText.getText(), "htmltext", filePassText.getText(), ".ptf");
+        
+        if(!uploadToFTP.equals(FtpSave.fileUpdatedSuccessful)){
+            Stage errorWindow = new Stage();
+            errorWindow.initModality(Modality.APPLICATION_MODAL);
+            errorWindow.setTitle("Error");
+
+            Parent errorLayout = FXMLLoader.load(new URL("file:src/editor/ErrorBox.fxml"), new MyResources("Error", uploadToFTP));
+
+            Scene scene = new Scene(errorLayout);
+            errorWindow.setScene(scene);
+            errorWindow.showAndWait();
+        }
+        
+        
         ((Stage) (ftpScene.getScene().getWindow())).close();
     }
 
     public void cancel() throws Exception{
 
-        Stage errorWindow = new Stage();
-        errorWindow.initModality(Modality.APPLICATION_MODAL);
-        errorWindow.setTitle("Error");
-
-        Parent errorLayout = FXMLLoader.load(new URL("file:src/editor/ErrorBox.fxml"), new MyResources("Hata", "Get cucked!"));
-
-        Scene scene = new Scene(errorLayout);
-        errorWindow.setScene(scene);
-        errorWindow.showAndWait();
-        
-        
-        
         ((Stage) (ftpScene.getScene().getWindow())).close();
     }
 
