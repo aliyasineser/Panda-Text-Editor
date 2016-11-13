@@ -49,17 +49,15 @@ public class FtpBoxController implements Initializable {
 
     /**
      * user interface for ftp upload
-     *
      * @throws InterruptedException
      * @throws MalformedURLException
      * @throws IOException
      */
     public void save() throws InterruptedException, MalformedURLException, IOException {
-
+        
         FtpSave saveMe = new FtpSave();
 
-        String uploadToFTP = saveMe.uploadToFTP(ipText.getText(), portText.getText(), idText.getText(), passText.getText(), fileNameText.getText(),
-                textsInEditor, filePassText.getText(), ".ptf");
+        String uploadToFTP = saveMe.uploadToFTP(ipText.getText(), portText.getText(), idText.getText(), passText.getText(), fileNameText.getText(), textsInEditor, filePassText.getText(), ".ptf");
 
         if (!uploadToFTP.equals(FtpSave.fileUpdatedSuccessful)) {
             Stage errorWindow = new Stage();
@@ -77,18 +75,12 @@ public class FtpBoxController implements Initializable {
 
     }
 
+    /**
+     * cancel the ftp upload
+     * @throws Exception 
+     */
     public void cancel() throws Exception {
 
-//        Stage errorWindow = new Stage();
-//        errorWindow.initModality(Modality.APPLICATION_MODAL);
-//        errorWindow.setTitle("Error");
-//
-//        Parent errorLayout = FXMLLoader.load(new URL("file:src/editor/ErrorBox.fxml"), new MyResources("Hata", "Get cucked!"));
-//
-//        Scene scene = new Scene(errorLayout);
-//        errorWindow.setScene(scene);
-//        errorWindow.showAndWait();
-//        
         ((Stage) (ftpScene.getScene().getWindow())).close();
     }
 
