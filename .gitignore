@@ -3,6 +3,7 @@
 
 ### NetBeans ###
 nbproject/
+nbproject/private
 build/
 nbbuild/
 dist/
@@ -78,3 +79,4 @@ hs_err_pid*
 build/built-jar.properties
 build/built-jar.properties
 build/built-jar.properties
+nbproject/private/private.xml
