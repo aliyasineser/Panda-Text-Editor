@@ -1,7 +1,7 @@
 package editor;
 
 import java.io.*;
-/** Includes convertion utilities between Object and byte array
+/** Includes conversion utilities between Object and byte array
  *
  * @author Kaan Ucar
  */
@@ -9,6 +9,9 @@ public final class ByteArrayConverter {
 	/**
      * Converts given byte array to an Object.
      * Returns null if there is any problem.
+     * 
+     * @param byteObject bytes
+     * 
      * @return converted Object
      */
     public static Object convertFromByteArray(byte[] byteObject) {
@@ -31,6 +34,9 @@ public final class ByteArrayConverter {
 	/**
      * Converts given Object to byte array.
      * Returns null if there is any problem.
+     * 
+     * @param object object
+     * 
      * @return converted byte array
      */
     public static byte[] convertToByteArray(Object object) {

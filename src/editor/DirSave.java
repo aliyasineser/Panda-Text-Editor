@@ -9,10 +9,12 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.IOException;
+
 /**
  *
  * @author Kaan Ucar
  */
+<<<<<<< HEAD
 public class DirSave{
     /*This method saves the given file to a directory
      *
@@ -34,18 +36,34 @@ public class DirSave{
      * @return false when unsuccessful saving
      */
     private static boolean save(File file, byte[] bytes, String password){
+=======
+public class DirSave {
+
+    public static boolean save(File file, Object object, String password) {
+        
+        return save(file, ByteArrayConverter.convertToByteArray(object), password);
+    }
+
+    private static boolean save(File file, byte[] bytes, String password) {
+>>>>>>> refs/remotes/origin/master
         byte[] encryptedBytes = Cryption.encryptFile(bytes, password);
-        if(encryptedBytes == null)
+        if (encryptedBytes == null) {
             return false;
+<<<<<<< HEAD
         
         try{
            // writting encrypted file to the directory path
             Files.write(Paths.get(file.getPath()), encryptedBytes);
+=======
+>>>>>>> refs/remotes/origin/master
         }
-        catch(IOException ex){
+
+        try {
+            Files.write(Paths.get(file.getPath()), encryptedBytes);
+        } catch (IOException ex) {
             return false;
         }
-            
+
         return true;
     }
 }

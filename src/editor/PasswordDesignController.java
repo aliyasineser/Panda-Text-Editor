@@ -46,6 +46,7 @@ public class PasswordDesignController implements Initializable {
 
     /**
      * Shortcuts added
+     *
      * @param url
      * @param rb
      */
@@ -53,22 +54,30 @@ public class PasswordDesignController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         Image.setImage(new Image("file:src/Assets/64x64_panda_icon.png"));
+
+    }
+
+    public void handleButtons() {
+
         //enter'a basildigi zaman sifre sisteme girilecek
         //esc'ye basildigi zaman sifre ekrani kapatilip dosya acilmayacak
         passText.setOnKeyPressed((KeyEvent key) -> {
-            if (key.getCode() == KeyCode.ENTER) {
-                //System.err.println("firee");
-                enterButton.fire();
-            }
-            if (key.getCode() == KeyCode.ESCAPE) {
-                cancelButton.fire();
+            try {
+                if (key.getCode() == KeyCode.ENTER) {
 
+                    enter();
+                }
+                if (key.getCode() == KeyCode.ESCAPE) {
+                    cancel();
+
+                }
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
             }
         });
 
     }
 
-    // 
     /**
      * When the enter key is pressed,this function activated
      *
@@ -81,7 +90,7 @@ public class PasswordDesignController implements Initializable {
             EditorController.receivedPassword = passText.getText();
             ((Stage) (passScene.getScene().getWindow())).close();
         } else {
-            //System.err.println(TextEditor.getPasswordOfTheUser() + "  " + passText.getText());
+            System.err.println(TextEditor.getPasswordOfTheUser() + "  " + passText.getText());
             passText.clear();
             Stage errorWindow = new Stage();
             errorWindow.initModality(Modality.APPLICATION_MODAL);

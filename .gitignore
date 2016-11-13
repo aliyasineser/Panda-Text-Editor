@@ -2,7 +2,8 @@
 # Created by https://www.gitignore.io/api/netbeans,java,intellij
 
 ### NetBeans ###
-nbproject/private/
+nbproject/
+nbproject/private
 build/
 nbbuild/
 dist/
@@ -76,3 +77,6 @@ fabric.properties
 hs_err_pid*
 
 build/built-jar.properties
+build/built-jar.properties
+build/built-jar.properties
+nbproject/private/private.xml

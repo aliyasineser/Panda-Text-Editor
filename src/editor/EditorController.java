@@ -40,14 +40,14 @@ public class EditorController implements Initializable {
     private Desktop desktop = Desktop.getDesktop();
     public BorderPane borderPane;
     final HTMLEditor htmlEditor = new HTMLEditor();
-    
+
     // Dosya şifrelemede kullanılan password.
     public static String receivedPassword = null; //askpassword ile aldigi o anlik sifre
-    
+
     public static boolean sign = false;
     //dogruluk kontrolleri fonksiyonlar icinde yapiliyor
     //askpasswordden return ediliyor
-    
+
     final Label labelFile = new Label();
 
     final TextArea textArea = TextAreaBuilder.create()
@@ -58,15 +58,10 @@ public class EditorController implements Initializable {
     // son girilen directory ve passwordler sayesinde ctrl+s ile hızlıca kayıt yapılabilecek
     private String lastDirectory = null;
     private String lastPassword = null;
-<<<<<<< HEAD
+
     private String lastText = "";
     private String lastSavedText = "";
-    
-=======
-    private String lastText;
 
->>>>>>> b3d2532887bc586d897a3d8eb2307703509506c2
-    @Override
     public void initialize(URL location, ResourceBundle resources) {
 
         htmlEditor.setPrefHeight(400);
@@ -78,7 +73,7 @@ public class EditorController implements Initializable {
             }
         });
     }
-    
+
     public static String getReceivedPassword() {
         return receivedPassword;
     }
@@ -93,19 +88,19 @@ public class EditorController implements Initializable {
         Stage passWindow = new Stage();
         passWindow.initModality(Modality.APPLICATION_MODAL);
         passWindow.setTitle("Enter password to encrypt file");
-       
+
         Parent passLayout = FXMLLoader.load(new URL("file:src/editor/PasswordDesign.fxml"));
-        
+
         Scene thisScene = new Scene(passLayout);
         passWindow.setOnCloseRequest(event -> {
-           sign = true;
-                    
+            sign = true;
+
         });
         passWindow.setScene(thisScene);
         passWindow.showAndWait();
         return getReceivedPassword();
     }
-    
+
     /**
      * Creates new page.
      */
