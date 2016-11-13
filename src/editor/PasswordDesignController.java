@@ -36,7 +36,7 @@ import javafx.stage.Stage;
  * @author ilayd
  */
 public class PasswordDesignController implements Initializable {
-
+    
     public VBox passScene;
     public Button cancelButton;
     public Button enterButton;
@@ -44,6 +44,12 @@ public class PasswordDesignController implements Initializable {
     public ImageView Image;
     public Pane pane;
 
+    private static String password = null;
+    
+    public static String getPassword(){
+        return password;
+    }
+    
     /**
      * Shortcuts added
      *
@@ -86,8 +92,20 @@ public class PasswordDesignController implements Initializable {
      */
     public void enter() throws IOException {
 
-        EditorController.receivedPassword = passText.getText();
+        password = passText.getText();
         ((Stage) (passScene.getScene().getWindow())).close();
+        /* else {
+            System.err.println(TextEditor.getPasswordOfTheUser() + "  " + passText.getText());
+            passText.clear();
+            Stage errorWindow = new Stage();
+            errorWindow.initModality(Modality.APPLICATION_MODAL);
+            errorWindow.setTitle("Error");
+            Parent errorLayout = FXMLLoader.load(new URL("file:src/editor/ErrorBox.fxml"), new MyResources("Error", "Password is incorrect"));
+            Scene scene = new Scene(errorLayout);
+            errorWindow.setScene(scene);
+            errorWindow.showAndWait();
+            EditorController.receivedPassword = passText.getText();
+        }*/
     }
 
     /**
@@ -95,7 +113,7 @@ public class PasswordDesignController implements Initializable {
      *
      */
     public void cancel() {
-        EditorController.sign = true;
+        password = null;
         //eger arayuzden editorController class,na bir sey return edebilirsek 
         //bu sign silinecek
         ((Stage) (passScene.getScene().getWindow())).close();
