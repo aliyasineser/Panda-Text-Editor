@@ -311,7 +311,12 @@ public class EditorController implements Initializable {
         }
     }
 
-    // bu fonksiyon ctrl+S icin
+   /**
+     * This method for a quick save the file to the current path. It's like the 
+     * ctrl+s of the text editors we normally use.
+     * @throws Exception 
+     */  
+
     public void quickSaveTextFile() throws Exception {
         if (lastDirectory == null) {
             saveTextFile();
@@ -412,6 +417,11 @@ public class EditorController implements Initializable {
             }
         }
     }
+    /**
+     * This method replaced html tags that's specified with space character     * 
+     * @param htmlText a text of html
+     * @return plain text without html tags
+     */
 
     private String stripHTMLTags(String htmlText) {
 
