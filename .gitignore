@@ -2,7 +2,7 @@
 # Created by https://www.gitignore.io/api/netbeans,java,intellij
 
 ### NetBeans ###
-nbproject/private/
+nbproject/
 build/
 nbbuild/
 dist/
