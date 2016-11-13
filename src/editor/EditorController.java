@@ -29,7 +29,6 @@ import javafx.scene.web.HTMLEditor;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 /**
  *
  * @author aliya
@@ -40,13 +39,6 @@ public class EditorController implements Initializable {
     private Desktop desktop = Desktop.getDesktop();
     public BorderPane borderPane;
     final HTMLEditor htmlEditor = new HTMLEditor();
-
-    // Dosya şifrelemede kullanılan password.
-    public static String receivedPassword = null; //askpassword ile aldigi o anlik sifre
-
-    public static boolean sign = false;
-    //dogruluk kontrolleri fonksiyonlar icinde yapiliyor
-    //askpasswordden return ediliyor
 
     final Label labelFile = new Label();
 
@@ -74,31 +66,34 @@ public class EditorController implements Initializable {
         });
     }
 
-    public static String getReceivedPassword() {
-        return receivedPassword;
-    }
-
     /**
      * This method create an menu and getting password to encrypt file.
      *
      * @return password which is received from user.
      * @throws Exception FXML loader can throw exception.
      */
-    public static String askPassword() throws Exception {
+    public static String askPassword(){
         Stage passWindow = new Stage();
         passWindow.initModality(Modality.APPLICATION_MODAL);
-        passWindow.setTitle("Enter password to encrypt file");
-
-        Parent passLayout = FXMLLoader.load(new URL("file:src/editor/PasswordDesign.fxml"));
-
-        Scene thisScene = new Scene(passLayout);
-        passWindow.setOnCloseRequest(event -> { //carpiya basilip kapatilinca
+        passWindow.setTitle("Enter password");
+        
+        try{
+            Parent passLayout = FXMLLoader.load(new URL("file:src/editor/PasswordDesign.fxml"));
+        
+        
+            Scene thisScene = new Scene(passLayout);
+        
+        /*passWindow.setOnCloseRequest(event -> {
             sign = true;
 
-        });
+        });*/
         passWindow.setScene(thisScene);
+        }
+        catch(Exception ex){
+                
+        }
         passWindow.showAndWait();
-        return getReceivedPassword();
+        return PasswordDesignController.getPassword();
     }
 
     /**
@@ -157,27 +152,23 @@ public class EditorController implements Initializable {
                 Path path = Paths.get(file.getPath());
 
                 byte[] encryptedBytes = Files.readAllBytes(path);
-                String password = askPassword();
-                //System.out.println(password);
-                if (password == null) {
-                    return;
-                }
-
-                byte[] decryptedBytes = Cryption.decryptFile(encryptedBytes, password);
-
-                while (decryptedBytes == null && password != null) {
+                
+                byte[] decryptedBytes;
+                String password;
+                do{
                     // sifre yanlis tekrar sor
-                    if (sign) {//eger arayuzde cancel'a basilirsa !!
-                        //dosyayi acmadan open islemini durdurur
-                        return;
-                    }
+                    
                     password = askPassword();
+                    if(password == null)
+                        return;
+                    
                     decryptedBytes = Cryption.decryptFile(encryptedBytes, password);
-                }
+                }while (decryptedBytes == null);
 
                 String txt = (String) (ByteArrayConverter.convertFromByteArray(decryptedBytes));
                 htmlEditor.setHtmlText(txt);
                 lastDirectory = file.getPath();
+                lastPassword = password;
             } else {
                 htmlEditor.setHtmlText(readFile(file));
                 lastDirectory = null;
@@ -275,12 +266,8 @@ public class EditorController implements Initializable {
             directory = directory.substring(0, directory.lastIndexOf('.'));
         }
 
-        try {
-            saveTextFile(directory + ".ptf");
-
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
+        
+        saveTextFile(directory + ".ptf");
     }
 
     /**
@@ -289,10 +276,13 @@ public class EditorController implements Initializable {
      * @param directory
      * @throws Exception
      */
-    private void saveTextFile(String directory) throws Exception {
+    private void saveTextFile(String directory){
         File file = new File(directory);
 
         String password = askPassword();
+        if(password == null)
+            return;
+        
         if (DirSave.save(file, htmlEditor.getHtmlText(), password)) {
             lastDirectory = file.getPath();
             lastPassword = password;
@@ -303,11 +293,16 @@ public class EditorController implements Initializable {
             errorWindow.initModality(Modality.APPLICATION_MODAL);
             errorWindow.setTitle("Error");
 
-            Parent errorLayout = FXMLLoader.load(getClass().getResource("ErrorBox.fxml"), new MyResources("Error", "File couldn't save."));
-
-            Scene scene = new Scene(errorLayout);
-            errorWindow.setScene(scene);
-            errorWindow.showAndWait();
+            try{
+                Parent errorLayout = FXMLLoader.load(getClass().getResource("ErrorBox.fxml"), new MyResources("Error", "File couldn't save."));
+            
+                Scene scene = new Scene(errorLayout);
+                errorWindow.setScene(scene);
+                errorWindow.showAndWait();
+            }
+            catch(Exception ex){
+                
+            }
         }
     }
 
@@ -328,7 +323,7 @@ public class EditorController implements Initializable {
             errorWindow.setScene(scene);
             errorWindow.showAndWait();
         } else {
-            lastText = htmlEditor.getHtmlText();
+            lastText = lastSavedText = htmlEditor.getHtmlText();
         }
     }
 
@@ -391,8 +386,7 @@ public class EditorController implements Initializable {
      */
     private static void configureFileChooserSave(final FileChooser fileChooser) {
         fileChooser.setTitle("Save file");
-        fileChooser.setInitialDirectory(
-                new File(System.getProperty("user.home"), "/Desktop"));
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.home"), "/Desktop"));
 
         FileChooser.ExtensionFilter pteFilter = new FileChooser.ExtensionFilter("PTF files (*.ptf)", "*.ptf");
         fileChooser.getExtensionFilters().add(pteFilter);
