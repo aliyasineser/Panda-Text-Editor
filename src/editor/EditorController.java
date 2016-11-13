@@ -92,7 +92,7 @@ public class EditorController implements Initializable {
         Parent passLayout = FXMLLoader.load(new URL("file:src/editor/PasswordDesign.fxml"));
 
         Scene thisScene = new Scene(passLayout);
-        passWindow.setOnCloseRequest(event -> {
+        passWindow.setOnCloseRequest(event -> { //carpiya basilip kapatilinca
             sign = true;
 
         });

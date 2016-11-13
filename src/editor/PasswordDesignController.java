@@ -86,21 +86,8 @@ public class PasswordDesignController implements Initializable {
      */
     public void enter() throws IOException {
 
-        if (TextEditor.getPasswordOfTheUser().equals(passText.getText())) {
-            EditorController.receivedPassword = passText.getText();
-            ((Stage) (passScene.getScene().getWindow())).close();
-        } else {
-            System.err.println(TextEditor.getPasswordOfTheUser() + "  " + passText.getText());
-            passText.clear();
-            Stage errorWindow = new Stage();
-            errorWindow.initModality(Modality.APPLICATION_MODAL);
-            errorWindow.setTitle("Error");
-            Parent errorLayout = FXMLLoader.load(new URL("file:src/editor/ErrorBox.fxml"), new MyResources("Error", "Password is incorrect"));
-            Scene scene = new Scene(errorLayout);
-            errorWindow.setScene(scene);
-            errorWindow.showAndWait();
-            EditorController.receivedPassword = passText.getText();
-        }
+        EditorController.receivedPassword = passText.getText();
+        ((Stage) (passScene.getScene().getWindow())).close();
     }
 
     /**
