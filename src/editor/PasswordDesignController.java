@@ -46,7 +46,31 @@ public class PasswordDesignController implements Initializable {
 
     private static String password = null;
     
-    public static String getPassword(){
+    /**
+     * This method create an menu and getting password.
+     *
+     * @return password which is received from user.
+     */
+    public static String askPassword(){
+        Stage passWindow = new Stage();
+        passWindow.initModality(Modality.APPLICATION_MODAL);
+        passWindow.setTitle("Enter password");
+        
+        try{
+            Parent passLayout = FXMLLoader.load(new URL("file:src/editor/PasswordDesign.fxml"));
+            Scene thisScene = new Scene(passLayout);
+        
+            passWindow.setOnCloseRequest(event -> {
+                password = null;
+            });
+            
+            passWindow.setScene(thisScene);
+            passWindow.showAndWait();
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+        
         return password;
     }
     
@@ -95,16 +119,9 @@ public class PasswordDesignController implements Initializable {
         password = passText.getText();
         ((Stage) (passScene.getScene().getWindow())).close();
         /* else {
-            System.err.println(TextEditor.getPasswordOfTheUser() + "  " + passText.getText());
+            TextEditor.getPasswordOfTheUser() + "  " + passText.getText());
             passText.clear();
-            Stage errorWindow = new Stage();
-            errorWindow.initModality(Modality.APPLICATION_MODAL);
-            errorWindow.setTitle("Error");
-            Parent errorLayout = FXMLLoader.load(new URL("file:src/editor/ErrorBox.fxml"), new MyResources("Error", "Password is incorrect"));
-            Scene scene = new Scene(errorLayout);
-            errorWindow.setScene(scene);
-            errorWindow.showAndWait();
-            EditorController.receivedPassword = passText.getText();
+            
         }*/
     }
 
@@ -114,8 +131,7 @@ public class PasswordDesignController implements Initializable {
      */
     public void cancel() {
         password = null;
-        //eger arayuzden editorController class,na bir sey return edebilirsek 
-        //bu sign silinecek
+        
         ((Stage) (passScene.getScene().getWindow())).close();
     }
 
