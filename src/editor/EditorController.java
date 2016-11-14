@@ -28,7 +28,8 @@ import javafx.scene.web.HTMLEditor;
 import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-/**
+
+/** Includes text editor button controller functions
  *
  * @author aliya
  */
@@ -46,12 +47,18 @@ public class EditorController implements Initializable {
             .wrapText(true)
             .build();
 
-    // son girilen directory ve passwordler sayesinde ctrl+s ile hızlıca kayıt yapılabilecek
+    // son girilen directory ve passwordler sayesinde ctrl+s ile hizlica kayit yapilabilecek
     private String lastDirectory = null;
     private String lastPassword = null;
 
     private String lastSavedText = null;
 
+    /**
+     * Initializes editor
+     * 
+     * @param location
+     * @param resources
+     */
     public void initialize(URL location, ResourceBundle resources) {
 
         htmlEditor.setPrefHeight(400);
@@ -78,6 +85,11 @@ public class EditorController implements Initializable {
         lastDirectory = null;
     }
 
+    /**
+     * checks weather the text is changed since last save or not.
+     * 
+     * @return returns true if changed
+     */
     private boolean isTextChanged() {
         return !(htmlEditor.getHtmlText().equals(lastSavedText));
     }
@@ -153,8 +165,8 @@ public class EditorController implements Initializable {
     /**
      * Reads file from the given File object.
      *
-     * @param file
-     * @return
+     * @param file filePath
+     * @return file context as String
      * @throws Exception
      */
     public static String readFile(File file) throws Exception {
@@ -185,7 +197,7 @@ public class EditorController implements Initializable {
     }
 
     /**
-     * Does the save operation, interacts with user via File Chooser to get the
+     * Saves file with encrypting, interacts with user via File Chooser to get the
      * path and name.
      */
     public void saveTextFile() {
@@ -208,9 +220,9 @@ public class EditorController implements Initializable {
     }
 
     /**
-     * Takes the path of the string and does the save operation.
+     * Takes save location as String and saves with encrypting.
      *
-     * @param directory
+     * @param directory location path to save
      * @throws Exception
      */
     private void saveTextFile(String directory){
@@ -229,7 +241,10 @@ public class EditorController implements Initializable {
         }
     }
 
-    // bu fonksiyon ctrl+S icin
+    /**
+     * Checks last directory and passwords used and uses them if they are existed.
+     * This function designed for Ctrl+S.
+     */
     public void quickSaveTextFile(){
         if (lastDirectory == null) {
             saveTextFile();
@@ -309,7 +324,7 @@ public class EditorController implements Initializable {
     }
 
     /**
-     * Prints the text
+     * Prints text from printer.
      */
     public void printText() {
 
@@ -322,6 +337,10 @@ public class EditorController implements Initializable {
         }
     }
 
+    /**
+     * Strips htmlText.
+     * may be useful later.
+     */
     private String stripHTMLTags(String htmlText) {
 
         Pattern pattern = Pattern.compile("<[^>]*>");
@@ -332,6 +351,5 @@ public class EditorController implements Initializable {
         }
         matcher.appendTail(sb);
         return (sb.toString().trim());
-
     }
 }
