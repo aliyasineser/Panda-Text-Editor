@@ -7,7 +7,10 @@ package editor;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -15,6 +18,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 /**
@@ -30,6 +34,21 @@ public class ErrorBoxController implements Initializable {
     public Label detailsLabel;
     public Button okButton;
 
+    public static void showErrorBox(String windowTitle, String messageTitle, String message){
+        try{
+            Stage errorWindow = new Stage();
+            errorWindow.initModality(Modality.APPLICATION_MODAL);
+            errorWindow.setTitle(windowTitle);
+            Parent errorLayout = FXMLLoader.load(new URL("file:src/editor/ErrorBox.fxml"), new MyResources(messageTitle, message));
+            Scene scene = new Scene(errorLayout);
+            errorWindow.setScene(scene);
+            errorWindow.showAndWait();
+        }
+        catch(Exception ex){
+        
+        }
+    }
+    
     /**
      * Initializes the controller class.
      */
