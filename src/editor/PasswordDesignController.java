@@ -1,30 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package editor;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseDragEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -47,7 +35,7 @@ public class PasswordDesignController implements Initializable {
     private static String password = null;
     
     /**
-     * This method create an menu and getting password.
+     * This method creates a window to getting password from user.
      *
      * @return password which is received from user.
      */
@@ -90,7 +78,7 @@ public class PasswordDesignController implements Initializable {
     public void handleButtons() {
 
         //enter'a basildigi zaman sifre sisteme girilecek
-        //esc'ye basildigi zaman sifre ekrani kapatilip dosya acilmayacak
+        //esc'ye basildigi zaman sifre ekrani kapatilacak
         passText.setOnKeyPressed((KeyEvent key) -> {
             try {
                 if (key.getCode() == KeyCode.ENTER) {
@@ -109,30 +97,20 @@ public class PasswordDesignController implements Initializable {
     }
 
     /**
-     * When the enter key is pressed,this function activated
-     *
+     * When the enter key is pressed updates password and closes window
      *
      * @throws IOException
      */
     public void enter() throws IOException {
-
         password = passText.getText();
         ((Stage) (passScene.getScene().getWindow())).close();
-        /* else {
-            TextEditor.getPasswordOfTheUser() + "  " + passText.getText());
-            passText.clear();
-            
-        }*/
     }
 
     /**
-     * When the cancel key is pressed,this function activated
-     *
+     * When the cancel key is pressed resets password and closes window
      */
     public void cancel() {
         password = null;
-        
         ((Stage) (passScene.getScene().getWindow())).close();
     }
-
 }
