@@ -10,7 +10,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Paths;
-import java.util.Enumeration;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,7 +35,7 @@ import javafx.stage.Stage;
 public class EditorController implements Initializable {
 
     private Stage window;
-    private Desktop desktop = Desktop.getDesktop();
+    private final Desktop desktop = Desktop.getDesktop();
     public BorderPane borderPane;
     final HTMLEditor htmlEditor = new HTMLEditor();
 
@@ -51,49 +50,19 @@ public class EditorController implements Initializable {
     private String lastDirectory = null;
     private String lastPassword = null;
 
-    private String lastText = "";
-    private String lastSavedText = "";
+    private String lastSavedText = null;
 
     public void initialize(URL location, ResourceBundle resources) {
 
         htmlEditor.setPrefHeight(400);
         borderPane.setCenter(htmlEditor);
+        lastSavedText = htmlEditor.getHtmlText();
         htmlEditor.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
-                lastText = stripHTMLTags(htmlEditor.getHtmlText());
+                //may be useful later
             }
         });
-    }
-
-    /**
-     * This method create an menu and getting password to encrypt file.
-     *
-     * @return password which is received from user.
-     * @throws Exception FXML loader can throw exception.
-     */
-    public static String askPassword(){
-        Stage passWindow = new Stage();
-        passWindow.initModality(Modality.APPLICATION_MODAL);
-        passWindow.setTitle("Enter password");
-        
-        try{
-            Parent passLayout = FXMLLoader.load(new URL("file:src/editor/PasswordDesign.fxml"));
-        
-        
-            Scene thisScene = new Scene(passLayout);
-        
-        /*passWindow.setOnCloseRequest(event -> {
-            sign = true;
-
-        });*/
-        passWindow.setScene(thisScene);
-        }
-        catch(Exception ex){
-                
-        }
-        passWindow.showAndWait();
-        return PasswordDesignController.getPassword();
     }
 
     /**
@@ -101,17 +70,16 @@ public class EditorController implements Initializable {
      */
     public void newTextFile() {
         if (isTextChanged() && askSaveChanges()) {
-            saveTextFile();
+            quickSaveTextFile();
         }
 
         htmlEditor.setHtmlText("");
-        lastText = "";
         lastSavedText = "";
         lastDirectory = null;
     }
 
     private boolean isTextChanged() {
-        return !(lastText.equals(lastSavedText));
+        return !(htmlEditor.getHtmlText().equals(lastSavedText));
     }
 
     /**
@@ -157,12 +125,14 @@ public class EditorController implements Initializable {
                 String password;
                 do{
                     // sifre yanlis tekrar sor
-                    
-                    password = askPassword();
+                    password = PasswordDesignController.askPassword();
                     if(password == null)
                         return;
                     
                     decryptedBytes = Cryption.decryptFile(encryptedBytes, password);
+                    if(decryptedBytes == null){
+                        ErrorBoxController.showErrorBox("Invalid Password!","Invalid Password!", "Password is invalid! Please try again.");
+                    }
                 }while (decryptedBytes == null);
 
                 String txt = (String) (ByteArrayConverter.convertFromByteArray(decryptedBytes));
@@ -174,18 +144,9 @@ public class EditorController implements Initializable {
                 lastDirectory = null;
             }
 
-            lastText = htmlEditor.getHtmlText();
-            lastSavedText = lastText;
+            lastSavedText = htmlEditor.getHtmlText();
         } catch (Exception ex) {
-            Stage errorWindow = new Stage();
-            errorWindow.initModality(Modality.APPLICATION_MODAL);
-            errorWindow.setTitle("Error");
-
-            Parent errorLayout = FXMLLoader.load(new URL("file:src/editor/ErrorBox.fxml"), new MyResources("Error", "File couldn't opened."));
-
-            Scene scene = new Scene(errorLayout);
-            errorWindow.setScene(scene);
-            errorWindow.showAndWait();
+            ErrorBoxController.showErrorBox("Error", "Cannot Open File!", "File could not be opened!");
         }
     }
 
@@ -210,38 +171,14 @@ public class EditorController implements Initializable {
             }
 
         } catch (FileNotFoundException ex) {
-            Stage errorWindow = new Stage();
-            errorWindow.initModality(Modality.APPLICATION_MODAL);
-            errorWindow.setTitle("Error");
-
-            Parent errorLayout = FXMLLoader.load(new URL("file:src/editor/ErrorBox.fxml"), new MyResources("Error", "File couldn't found."));
-
-            Scene scene = new Scene(errorLayout);
-            errorWindow.setScene(scene);
-            errorWindow.showAndWait();
+            ErrorBoxController.showErrorBox("Error", "Cannot Find File!", "File could not be found!");
         } catch (IOException ex) {
-            Stage errorWindow = new Stage();
-            errorWindow.initModality(Modality.APPLICATION_MODAL);
-            errorWindow.setTitle("Error");
-
-            Parent errorLayout = FXMLLoader.load(new URL("file:src/editor/ErrorBox.fxml"), new MyResources("Error", "File couldn't opened."));
-
-            Scene scene = new Scene(errorLayout);
-            errorWindow.setScene(scene);
-            errorWindow.showAndWait();
+            ErrorBoxController.showErrorBox("Error", "Cannot Open File!", "File could not be opened!");
         } finally {
             try {
                 bufferedReader.close();
             } catch (IOException ex) {
-                Stage errorWindow = new Stage();
-                errorWindow.initModality(Modality.APPLICATION_MODAL);
-                errorWindow.setTitle("Error");
-
-                Parent errorLayout = FXMLLoader.load(new URL("file:src/editor/ErrorBox.fxml"), new MyResources("Error", "File is corrupted."));
-
-                Scene scene = new Scene(errorLayout);
-                errorWindow.setScene(scene);
-                errorWindow.showAndWait();
+                ErrorBoxController.showErrorBox("Error", "Cannot Open File!", "File is corrupted!");
             }
         }
         return stringBuffer.toString();
@@ -279,51 +216,29 @@ public class EditorController implements Initializable {
     private void saveTextFile(String directory){
         File file = new File(directory);
 
-        String password = askPassword();
+        String password = PasswordDesignController.askPassword();
         if(password == null)
             return;
         
         if (DirSave.save(file, htmlEditor.getHtmlText(), password)) {
             lastDirectory = file.getPath();
             lastPassword = password;
-            lastText = htmlEditor.getHtmlText();
-            lastSavedText = lastText;
+            lastSavedText = htmlEditor.getHtmlText();
         } else {
-            Stage errorWindow = new Stage();
-            errorWindow.initModality(Modality.APPLICATION_MODAL);
-            errorWindow.setTitle("Error");
-
-            try{
-                Parent errorLayout = FXMLLoader.load(getClass().getResource("ErrorBox.fxml"), new MyResources("Error", "File couldn't save."));
-            
-                Scene scene = new Scene(errorLayout);
-                errorWindow.setScene(scene);
-                errorWindow.showAndWait();
-            }
-            catch(Exception ex){
-                
-            }
+            ErrorBoxController.showErrorBox("Error", "Cannot Save File!", "File could not be saved!");
         }
     }
 
     // bu fonksiyon ctrl+S icin
-    public void quickSaveTextFile() throws Exception {
+    public void quickSaveTextFile(){
         if (lastDirectory == null) {
             saveTextFile();
         } else if (lastPassword == null) {
             saveTextFile(lastDirectory);
         } else if (!DirSave.save(new File(lastDirectory), htmlEditor.getHtmlText(), lastPassword)) {
-            Stage errorWindow = new Stage();
-            errorWindow.initModality(Modality.APPLICATION_MODAL);
-            errorWindow.setTitle("Error");
-
-            Parent errorLayout = FXMLLoader.load(new URL("file:src/editor/ErrorBox.fxml"), new MyResources("Error", "Wrong Password."));
-
-            Scene scene = new Scene(errorLayout);
-            errorWindow.setScene(scene);
-            errorWindow.showAndWait();
+            ErrorBoxController.showErrorBox("Error", "Cannot Save File!", "File could not be saved!");
         } else {
-            lastText = lastSavedText = htmlEditor.getHtmlText();
+            lastSavedText = htmlEditor.getHtmlText();
         }
     }
 
