@@ -342,6 +342,15 @@ public class EditorController implements Initializable {
                 job.endJob();
             }
         }
+        /* Printer metodu linuxta calismadigi tespit edilmisti
+           bunun sebebinin yazici secme ekranin gelmemesi oldugu
+           farkedildi bu sorunun linux da kurulu bir yazici driveri 
+           olmadigi icin olustugu tespit edildi.
+        
+           Bunun uzerine linux pdf printer programi olan cups-pdf
+           ve bir HP yazici driveri kurularak test edildi ikisinde
+           de program calisti.
+            */
     }
     
     /**
