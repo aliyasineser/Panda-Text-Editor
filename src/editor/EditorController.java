@@ -324,19 +324,26 @@ public class EditorController implements Initializable {
     }
 
     /**
+     * Written by Hasan Bilgin
      * Prints text from printer.
+     * 
      */
     public void printText() {
-
         PrinterJob job = PrinterJob.createPrinterJob();
+        /* Javanin printer a erismek icin kullandigi PrinterJob nesnesi
+           olusturuldu*/
         if (job != null) {
+            // showPrintDialog Hangi yazicidan cikti alinacagini secmek icin
+            // bir dialog box olusturur
             if (job.showPrintDialog(null)) {
+                // Yazdirilacak metini secilen printera yollar
                 htmlEditor.print(job);
+                // Yazdirma islemini tamamlar 
                 job.endJob();
             }
         }
     }
-
+    
     /**
      * Strips htmlText.
      * may be useful later.
