@@ -75,7 +75,7 @@ public class EditorController implements Initializable {
     /**
      * Creates new page.
      */
-    public void newTextFile() {
+    public void newTextFile() throws IOException {
         if (isTextChanged() && askSaveChanges()) {
             quickSaveTextFile();
         }
@@ -307,7 +307,7 @@ public class EditorController implements Initializable {
     /**
      * Exiting from Program.
      */
-    public void closeProgram() {
+    public void closeProgram() throws IOException {
         if (isTextChanged() && askSaveChanges()) {
             saveTextFile();
         }
