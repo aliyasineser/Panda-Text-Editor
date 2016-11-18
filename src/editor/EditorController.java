@@ -75,7 +75,7 @@ public class EditorController implements Initializable {
     /**
      * Creates new page.
      */
-    public void newTextFile() {
+    public void newTextFile() throws IOException {
         if (isTextChanged() && askSaveChanges()) {
             quickSaveTextFile();
         }
@@ -99,10 +99,17 @@ public class EditorController implements Initializable {
      *
      * @return
      */
-    public boolean askSaveChanges() {
-        TODO:
-        // return true for yes
-        // return false for no
+    public boolean askSaveChanges() throws IOException {
+        Stage stage = new Stage();
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Error"); 
+        Parent root = FXMLLoader.load(getClass().getResource("AskToChanges.fxml"));
+        
+        Scene scene = new Scene(root);
+        
+        stage.setScene(scene);
+        stage.show();
+
 
         return false;
     }
@@ -300,7 +307,7 @@ public class EditorController implements Initializable {
     /**
      * Exiting from Program.
      */
-    public void closeProgram() {
+    public void closeProgram() throws IOException {
         if (isTextChanged() && askSaveChanges()) {
             saveTextFile();
         }
