@@ -5,35 +5,31 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.io.IOException;
 
-/** Includes save functions to directory
+/*
+ * This class saves the file as encrypted to given the directory 
  *
- * @author Kaan Ucar
  */
+
 public class DirSave {
-    /**
-     * Saves given object with encrypting by given password.
+    /*This method saves given object with encrypting by given 	*password.
      * Returns false if there is any problem.
-     * 
-     * @param file path
-     * @param object object
-     * @param password password
-     * 
-     * @return save statement
+     * @param file given file that want to save
+     * @param object this object converted as a byte array
+     * @param password the password of given file
+     * @return save() call the wrapper save function
      */
     public static boolean save(File file, Object object, String password) {
         
         return save(file, ByteArrayConverter.convertToByteArray(object), password);
     }
 
-    /**
-     * Saves given byte array with encrypting by given password.
-     * Returns false if there is any problem.
-     * 
-     * @param file path
-     * @param object object
-     * @param password password
-     * 
-     * @return save statement
+    /*This method encrypted the given file 
+     *
+     * @param file given file that want to save
+     * @param bytes uses for cryption
+     * @param password the password of given file
+     * @return true when successful saving
+     * @return false when unsuccessful saving
      */
     private static boolean save(File file, byte[] bytes, String password) {
         byte[] encryptedBytes = Cryption.encryptFile(bytes, password);
@@ -42,6 +38,7 @@ public class DirSave {
         }
 
         try {
+            // writting encrypted file to the directory path
             Files.write(Paths.get(file.getPath()), encryptedBytes);
         } catch (IOException ex) {
             return false;
