@@ -38,7 +38,7 @@ public class AskChangesController implements Initializable {
     @FXML
     private void handleButtonAction(ActionEvent event) {
         System.out.println("Save"); 
-        EditorController.save();
+        //EditorController.save();
     }
     @FXML
     private void handleButtonAction2(ActionEvent event) {
