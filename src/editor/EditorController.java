@@ -75,13 +75,17 @@ public class EditorController implements Initializable {
     /**
      * Creates new page.
      */
-    public void newTextFile() throws IOException {
-        if (isTextChanged() && askSaveChanges()) {
-            quickSaveTextFile();
+    public void newTextFile(){
+        if (isTextChanged()){
+            Boolean answer = AskChangesController.askToChanges();
+            if(answer == null)
+                return;
+            else if(answer == true)
+                quickSaveTextFile();
         }
 
         htmlEditor.setHtmlText("");
-        lastSavedText = "";
+        lastSavedText = htmlEditor.getHtmlText();
         lastDirectory = null;
     }
 
@@ -95,34 +99,18 @@ public class EditorController implements Initializable {
     }
 
     /**
-     * TODO
-     *
-     * @return
-     */
-    public boolean askSaveChanges() throws IOException {
-        Stage stage = new Stage();
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setTitle("Error"); 
-        Parent root = FXMLLoader.load(getClass().getResource("AskToChanges.fxml"));
-        
-        Scene scene = new Scene(root);
-        
-        stage.setScene(scene);
-        stage.show();
-
-
-        return false;
-    }
-
-    /**
      * Interacts with the user via FileChooser to get the file which will be
      * open.
      *
      * @throws Exception
      */
     public void openTextFile() throws Exception {
-        if (isTextChanged() && askSaveChanges()) {
-            saveTextFile();
+        if (isTextChanged()){
+            Boolean answer = AskChangesController.askToChanges();
+            if(answer == null)
+                return;
+            else if(answer == true)
+                quickSaveTextFile();
         }
 
         FileChooser fileChooser = new FileChooser();
@@ -307,9 +295,13 @@ public class EditorController implements Initializable {
     /**
      * Exiting from Program.
      */
-    public void closeProgram() throws IOException {
-        if (isTextChanged() && askSaveChanges()) {
-            saveTextFile();
+    public void closeProgram(){
+        if (isTextChanged()){
+            Boolean answer = AskChangesController.askToChanges();
+            if(answer == null)
+                return;
+            else if(answer == true)
+                quickSaveTextFile();
         }
 
         ((Stage) (borderPane.getScene().getWindow())).close();
