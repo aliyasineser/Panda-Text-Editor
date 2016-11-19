@@ -5,7 +5,6 @@
  */
 package editor;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -35,41 +34,57 @@ public class AskChangesController implements Initializable {
     @FXML
     public ImageView Image;
     
+    private static Boolean answer = null;
+    
     @FXML
     private void handleButtonAction(ActionEvent event) {
-        System.out.println("Save"); 
-        //EditorController.save();
+        answer = true;
+        close();
     }
+    
     @FXML
     private void handleButtonAction2(ActionEvent event) {
-        System.out.println("Don't Save"); 
-        //EditorController.save();
+        answer = false;
+        close();
     }
     
     @FXML
     private void handleButtonAction3(ActionEvent event) {
-        cancel();
+        answer = null;
+        close();
     }
-    public void cancel() {
+    
+    public void close() {
         ((Stage) (cancel.getScene().getWindow())).close();
     }
+    
     @Override
     public void initialize(URL fxmlFileLocation, ResourceBundle rb) {
         Image.setImage(new Image("file:src/Assets/64x64_panda_icon.png"));
     }
     
-    public void askToChanges() throws IOException{
+    public static Boolean askToChanges(){
         
         Stage stage = new Stage();
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setTitle("Error"); 
-        Parent root = FXMLLoader.load(getClass().getResource("AskToChanges.fxml"));
         
-        Scene scene = new Scene(root);
+        try{
+            Parent root = FXMLLoader.load(new URL("file:src/editor/AskToChanges.fxml"));
         
-        stage.setScene(scene);
-        stage.show();
+            Scene scene = new Scene(root);
+        
+            stage.setOnCloseRequest(event -> {
+                answer = null;
+            });
+        
+            stage.setScene(scene);
+            stage.showAndWait();
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+        
+        return answer;
     }
- 
-    
 }
