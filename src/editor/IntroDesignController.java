@@ -10,11 +10,9 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -27,8 +25,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -43,9 +39,12 @@ public class IntroDesignController implements Initializable {
     private static String fileName = EditorAssets.passwordFile;
     private static Boolean authentication = false;
     private static String password = null;
-    
     @FXML
-    public PasswordField passField1;
+    private Button loginButton; 
+    @FXML 
+    private Label header;
+    @FXML
+    private PasswordField passField1;
     @FXML
     public Label passwordText2;
     @FXML
@@ -55,31 +54,9 @@ public class IntroDesignController implements Initializable {
    
     @FXML
     private void btnClick(ActionEvent event) throws IOException{
-        if (password == null) {
-            if (passField1.getText().length() != 0 && 
-                passField1.getText().equals(passField2.getText())) {
-                password = passField1.getText();
-                savePassword(passField1.getText());
-                loadTextEditor(event);
-            }else{
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Error Dialog");
-                alert.setHeaderText("Passwords doesn't match");
-                alert.setContentText("Passwords must be same!");
-                alert.show();
-            }
-        }else{
-            if (passField1.getText().length() != 0 && 
-                passField1.getText().equals(password)){
-                loadTextEditor(event);
-            }else{
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Error Dialog");
-                alert.setHeaderText("Wrong password");
-                alert.setContentText("If you don't remember password contact with administrator!");
-                alert.show();
-            }
-        }
+        if(checkInputs())
+            loadTextEditor(event);
+        
     }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -88,10 +65,12 @@ public class IntroDesignController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(IntroDesignController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if (password != null) {
+        if (password != null) {    
             passwordText2.setVisible(false);
             passField2.setVisible(false);
-        }
+            header.setText("Login Screen");
+        }else
+            header.setText("SignUp Screen");
     }    
     private void savePassword(String text) {
         File file = new File(directoryPath + fileName);
@@ -108,7 +87,7 @@ public class IntroDesignController implements Initializable {
         }        
     }
 
-    private void getUserPassword() throws IOException {
+    private void getUserPassword() throws IOException{
 
         // Try catch bloğu eklenerek exception fırlatması engellenebilir.
         // Dosya bulunamaması durumunda yeniden oluşturulur.
@@ -132,22 +111,53 @@ public class IntroDesignController implements Initializable {
             bufferedReader.close();
         }
     }
-    
-    public static String getPassword(){
-        return password;
-    }
 
     private void loadTextEditor(ActionEvent event) throws IOException{
-        ((Node) event.getSource()).getScene().getWindow().hide();
-        Parent root = FXMLLoader.load(getClass().getResource("EditorDesign.fxml"));
-        Stage primaryStage = new Stage();
-        primaryStage.getIcons().addAll(new Image("file:src/Assets/32x32_panda_icon.png"),
-                new Image("file:src/Assets/64x64_panda_icon.png"), new Image("file:src/Assets/256x256_panda_icon.png"));
-        primaryStage.setTitle("Welcome to Panda Text Editor");
-        Scene passwordScene = new Scene(root, 640, 480);
-        primaryStage.setScene(passwordScene);
-        primaryStage.setMinWidth(500);
-        primaryStage.setMinHeight(400);
-        primaryStage.show();
+        Parent homePageParent = FXMLLoader.load(getClass().getResource("EditorDesign.fxml"));
+        Scene homePageScene = new Scene(homePageParent);
+        Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        appStage.hide();
+        appStage.setScene(homePageScene);
+        appStage.getIcons().addAll(new Image("file:src/Assets/32x32_panda_icon.png"), 
+                new Image("file:src/Assets/64x64_panda_icon.png"), 
+                new Image("file:src/Assets/256x256_panda_icon.png"));
+        appStage.setTitle("Panda Text Editor");
+        appStage.setMinWidth(500);
+        appStage.setMinHeight(400);
+        appStage.show();
+    }
+    @FXML
+    public void onEnter(ActionEvent ae) throws IOException{
+        if(checkInputs())
+            loginButton.fire();
+    }
+
+    private boolean checkInputs() {
+        if (password == null) {
+            if (passField1.getText().length() != 0 && 
+                passField1.getText().equals(passField2.getText())) {
+                password = passField1.getText();
+                savePassword(passField1.getText());
+                return true;
+            }else{
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Error Dialog");
+                alert.setHeaderText("Passwords doesn't match");
+                alert.setContentText("Passwords must be same!");
+                alert.show();
+            }
+        }else{
+            if (passField1.getText().length() != 0 && 
+                passField1.getText().equals(password)){
+                return true;
+            }else{
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Error Dialog");
+                alert.setHeaderText("Wrong password");
+                alert.setContentText("If you don't remember password contact with administrator!");
+                alert.show();
+            }
+        }
+        return false;
     }
 }
