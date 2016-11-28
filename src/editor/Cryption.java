@@ -1,6 +1,6 @@
 package editor;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
