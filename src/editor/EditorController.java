@@ -71,6 +71,13 @@ public class EditorController implements Initializable {
             }
         });
     }
+    
+    /**
+     * highlights C++ keywords.
+     */
+    public void highlightCppKeywords(){
+        htmlEditor.setHtmlText(CppKeywordController.findKeywords(htmlEditor.getHtmlText()));
+    }
 
     /**
      * Creates new page.
