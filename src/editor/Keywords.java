@@ -60,7 +60,6 @@ public class Keywords {
                                                 Keywords.NOT_EQ,
                                                 Keywords.NULL_PTR,
                                                 Keywords.OPERATOR,
-                                                Keywords.OR,
                                                 Keywords.OR_EQ,
                                                 Keywords.PRIVATE,
                                                 Keywords.PROTECTED,
@@ -152,7 +151,6 @@ public class Keywords {
     public static final String NOT_EQ = "not_eq";
     public static final String NULL_PTR = "null_ptr";
     public static final String OPERATOR = "operator";
-    public static final String OR = "or";
     public static final String OR_EQ = "or_eq";
     public static final String PRIVATE = "private";
     public static final String PROTECTED = "protected";
