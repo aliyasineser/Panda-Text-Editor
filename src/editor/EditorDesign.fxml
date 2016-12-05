@@ -26,6 +26,7 @@
                 </Menu>
                 <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
                     <items>
+                        <MenuItem fx:id="cppItem" mnemonicParsing="false" onAction="#highlightCppKeywords" text="C++ Keywords" />
                         <MenuItem fx:id="deleteItem" mnemonicParsing="false" text="Delete" />
                     </items>
                 </Menu>
