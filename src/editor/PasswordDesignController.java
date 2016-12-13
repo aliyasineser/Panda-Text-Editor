@@ -1,30 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package editor;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseDragEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -36,7 +24,7 @@ import javafx.stage.Stage;
  * @author ilayd
  */
 public class PasswordDesignController implements Initializable {
-
+    
     public VBox passScene;
     public Button cancelButton;
     public Button enterButton;
@@ -44,6 +32,36 @@ public class PasswordDesignController implements Initializable {
     public ImageView Image;
     public Pane pane;
 
+    private static String password = null;
+    
+    /**
+     * This method creates a window to getting password from user.
+     *
+     * @return password which is received from user.
+     */
+    public static String askPassword(){
+        Stage passWindow = new Stage();
+        passWindow.initModality(Modality.APPLICATION_MODAL);
+        passWindow.setTitle("Enter password");
+        
+        try{
+            Parent passLayout = FXMLLoader.load(new URL("file:src/editor/PasswordDesign.fxml"));
+            Scene thisScene = new Scene(passLayout);
+        
+            passWindow.setOnCloseRequest(event -> {
+                password = null;
+            });
+            
+            passWindow.setScene(thisScene);
+            passWindow.showAndWait();
+        }
+        catch(Exception ex){
+            ex.printStackTrace();
+        }
+        
+        return password;
+    }
+    
     /**
      * Shortcuts added
      *
@@ -60,7 +78,7 @@ public class PasswordDesignController implements Initializable {
     public void handleButtons() {
 
         //enter'a basildigi zaman sifre sisteme girilecek
-        //esc'ye basildigi zaman sifre ekrani kapatilip dosya acilmayacak
+        //esc'ye basildigi zaman sifre ekrani kapatilacak
         passText.setOnKeyPressed((KeyEvent key) -> {
             try {
                 if (key.getCode() == KeyCode.ENTER) {
@@ -79,39 +97,20 @@ public class PasswordDesignController implements Initializable {
     }
 
     /**
-     * When the enter key is pressed,this function activated
-     *
+     * When the enter key is pressed updates password and closes window
      *
      * @throws IOException
      */
     public void enter() throws IOException {
-
-        if (TextEditor.getPasswordOfTheUser().equals(passText.getText())) {
-            EditorController.receivedPassword = passText.getText();
-            ((Stage) (passScene.getScene().getWindow())).close();
-        } else {
-            System.err.println(TextEditor.getPasswordOfTheUser() + "  " + passText.getText());
-            passText.clear();
-            Stage errorWindow = new Stage();
-            errorWindow.initModality(Modality.APPLICATION_MODAL);
-            errorWindow.setTitle("Error");
-            Parent errorLayout = FXMLLoader.load(new URL("file:src/editor/ErrorBox.fxml"), new MyResources("Error", "Password is incorrect"));
-            Scene scene = new Scene(errorLayout);
-            errorWindow.setScene(scene);
-            errorWindow.showAndWait();
-            EditorController.receivedPassword = passText.getText();
-        }
-    }
-
-    /**
-     * When the cancel key is pressed,this function activated
-     *
-     */
-    public void cancel() {
-        EditorController.sign = true;
-        //eger arayuzden editorController class,na bir sey return edebilirsek 
-        //bu sign silinecek
+        password = passText.getText();
         ((Stage) (passScene.getScene().getWindow())).close();
     }
 
+    /**
+     * When the cancel key is pressed resets password and closes window
+     */
+    public void cancel() {
+        password = null;
+        ((Stage) (passScene.getScene().getWindow())).close();
+    }
 }

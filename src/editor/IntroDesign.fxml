@@ -1,38 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import javafx.scene.effect.*?>
-<?import javafx.scene.image.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox fx:id="IntroScene" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="513.0" prefWidth="532.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="editor.PasswordDesignController">
+<VBox fx:id="IntroScene" alignment="TOP_CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="513.0" prefWidth="532.0" xmlns="http://javafx.com/javafx/8.0.65" xmlns:fx="http://javafx.com/fxml/1" fx:controller="editor.IntroDesignController">
    <children>
-      <Region prefHeight="86.0" prefWidth="532.0" />
-      <Label text="Panda Text Editor">
+      <Region prefHeight="101.0" prefWidth="532.0" />
+      <Label prefHeight="72.0" prefWidth="241.0" text="Panda Text Editor">
          <font>
             <Font name="Yu Gothic UI Regular" size="27.0" />
          </font>
       </Label>
-      <Region prefHeight="60.0" prefWidth="532.0" />
-      <ImageView fx:id="pandaEditorIcon" fitHeight="150.0" fitWidth="200.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
+      <Label fx:id="header" alignment="CENTER" contentDisplay="CENTER" ellipsisString="" prefHeight="20.0" prefWidth="240.0" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Region prefHeight="92.0" prefWidth="532.0" />
+      <ImageView fx:id="pandaEditorIcon" fitHeight="150.0" fitWidth="275.0" nodeOrientation="INHERIT" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../Assets/256x256_panda_icon.png" />
          </image>
       </ImageView>
-      <HBox alignment="CENTER" prefHeight="120.0" prefWidth="532.0">
+      <Region prefHeight="177.0" prefWidth="532.0" />
+      <HBox fx:id="PasswordBox1" alignment="BOTTOM_CENTER" prefHeight="137.0" prefWidth="532.0">
          <children>
-            <Label fx:id="userPasswordLabel" text="Password: " />
+            <Label fx:id="passwordText1" prefHeight="16.0" prefWidth="109.0" text="Password        " />
             <Region prefHeight="100.0" prefWidth="9.0" />
-            <PasswordField fx:id="userPasswordText" prefHeight="31.0" prefWidth="221.0" />
+            <PasswordField fx:id="passField1" onAction="#onEnter" prefHeight="31.0" prefWidth="212.0" />
          </children>
       </HBox>
-      <Button fx:id="loginButton" mnemonicParsing="false" text="Log in">
+      <HBox fx:id="PasswordBox2" alignment="CENTER" prefHeight="120.0" prefWidth="532.0">
+         <children>
+            <Label fx:id="passwordText2" text="Password Again  " />
+            <Region prefHeight="100.0" prefWidth="9.0" />
+            <PasswordField fx:id="passField2" onAction="#onEnter" prefHeight="31.0" prefWidth="211.0" />
+         </children>
+      </HBox>
+      <Button fx:id="loginButton" mnemonicParsing="false" onAction="#btnClick" prefHeight="26.0" prefWidth="70.0" text="Log in">
          <tooltip>
-            <Tooltip text="This is special password for pc user. If you are using the program for the first time, type the password you want. If you typed the password at least one time, then you have to type the password." />
+            <Tooltip autoFix="false" text="This is special password for pc user. If you are using the program for the first time, type the password you want. If you typed the password at least one time, then you have to type the password." />
          </tooltip>
       </Button>
       <Region prefHeight="134.0" prefWidth="532.0" />
