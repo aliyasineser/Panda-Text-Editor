@@ -111,11 +111,11 @@ public class EditorController implements Initializable {
      *
      * @throws Exception
      */
-    public void openTextFile() throws Exception {
+    public boolean openTextFile() throws Exception {
         if (isTextChanged()){
             Boolean answer = AskChangesController.askToChanges();
             if(answer == null)
-                return;
+                return false;
             else if(answer == true)
                 quickSaveTextFile();
         }
@@ -125,7 +125,7 @@ public class EditorController implements Initializable {
         File file = fileChooser.showOpenDialog(window);
 
         if (file == null) {
-            return; // path secimi iptal edildi
+            return false; // path secimi iptal edildi
         }
         labelFile.setText(file.getPath());
 
@@ -141,7 +141,7 @@ public class EditorController implements Initializable {
                     // sifre yanlis tekrar sor
                     password = PasswordDesignController.askPassword();
                     if(password == null)
-                        return;
+                        return false;
                     
                     decryptedBytes = Cryption.decryptFile(encryptedBytes, password);
                     if(decryptedBytes == null){
@@ -161,7 +161,9 @@ public class EditorController implements Initializable {
             lastSavedText = htmlEditor.getHtmlText();
         } catch (Exception ex) {
             ErrorBoxController.showErrorBox("Error", "Cannot Open File!", "File could not be opened!");
+            return false;
         }
+        return true;
     }
 
     /**
