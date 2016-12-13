@@ -20,14 +20,12 @@
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem fx:id="print" mnemonicParsing="false" onAction="#printText" text="Print..." accelerator="Shortcut+P" />
                         <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem fx:id="settingsItem" mnemonicParsing="false" text="Settings" />
                         <MenuItem fx:id="exitItem" mnemonicParsing="false" onAction="#closeProgram" text="Exit" accelerator="Shortcut+E" />
                     </items>
                 </Menu>
                 <Menu fx:id="editMenu" mnemonicParsing="false" text="Edit">
                     <items>
                         <MenuItem fx:id="cppItem" mnemonicParsing="false" onAction="#highlightCppKeywords" text="C++ Keywords" />
-                        <MenuItem fx:id="deleteItem" mnemonicParsing="false" text="Delete" />
                     </items>
                 </Menu>
                 <Menu fx:id="helpMenu" mnemonicParsing="false" text="Help">
