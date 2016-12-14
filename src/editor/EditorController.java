@@ -360,20 +360,4 @@ public class EditorController implements Initializable {
            de program calisti.
             */
     }
-    
-    /**
-     * Strips htmlText.
-     * may be useful later.
-     */
-    private String stripHTMLTags(String htmlText) {
-
-        Pattern pattern = Pattern.compile("<[^>]*>");
-        Matcher matcher = pattern.matcher(htmlText);
-        final StringBuffer sb = new StringBuffer(htmlText.length());
-        while (matcher.find()) {
-            matcher.appendReplacement(sb, " ");
-        }
-        matcher.appendTail(sb);
-        return (sb.toString().trim());
-    }
 }
