@@ -42,6 +42,25 @@ public final class CppKeywordController {
         return substr.substring(0,index)+colorTagBegin+keyword+colorTagEnd+highlightKeywords(substr.substring(index+keyword.length(),substr.length()),keyword);
     }
 
+    public static String unHighlightKeywords(String txt){
+        int lengthTagBegin = colorTagBegin.length();
+        int lengthTagEnd = colorTagEnd.length();
+        
+        for(int i=0;i<txt.length();++i){
+            if(txt.length() - i >= lengthTagBegin+lengthTagEnd && colorTagBegin.equals(txt.substring(i, i+lengthTagBegin))){
+                for(int j=0;j<Keywords.keywords.length;++j){
+                    if(txt.length() - i >= lengthTagEnd+Keywords.keywords[j].length()+lengthTagBegin && (Keywords.keywords[j]+colorTagEnd).equals(txt.substring(i+lengthTagBegin, i+lengthTagBegin+Keywords.keywords[j].length()+lengthTagEnd))){
+                        txt = txt.substring(0, i) + Keywords.keywords[j] + txt.substring(i+lengthTagBegin+Keywords.keywords[j].length()+lengthTagEnd, txt.length());
+                        i = i + Keywords.keywords[j].length()-1;
+                        break;
+                    }
+                }
+            }
+        }
+    
+        return txt;
+    }
+    
     /**
      * Strips htmlText.
      * may be useful later.
