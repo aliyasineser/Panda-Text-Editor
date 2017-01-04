@@ -78,6 +78,13 @@ public class EditorController implements Initializable {
     public void highlightCppKeywords(){
         htmlEditor.setHtmlText(CppKeywordController.findKeywords(htmlEditor.getHtmlText()));
     }
+    
+    /**
+     * removes highlights of C++ keywords.
+     */
+    public void unHighlightCppKeywords(){
+        htmlEditor.setHtmlText(CppKeywordController.unHighlightKeywords(htmlEditor.getHtmlText()));
+    }
 
     /**
      * Creates new page.
