@@ -1,6 +1,10 @@
 package editor;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+
 /** Includes conversion utilities between Object and byte array
  *
  * @author Kaan Ucar
